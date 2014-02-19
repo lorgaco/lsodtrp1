@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class EmisorUDP {
+public class CommClient {
 	public static void main(String args [] ) {
 		// Los argumentos dan:
 		// el nombre de la máquina receptora y 2 mensajes

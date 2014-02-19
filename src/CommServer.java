@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class ReceptorUDP {
+public class CommServer {
 	public static void main(String args [] ) {
 		// Sin argumentos
 		if (args.length != 0) {
