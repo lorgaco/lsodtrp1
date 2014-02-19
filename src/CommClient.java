@@ -1,39 +1,72 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 public class CommClient {
-	public static void main(String args [] ) {
-		// Los argumentos dan:
-		// el nombre de la máquina receptora y 2 mensajes
-		if (args.length != 3) {
-			System.err.println("Uso: java EmisorUDP maquina msj1 msj2");
-		}
-		else try{
-			// Crea su socket
-			DatagramSocket elSocket = new DatagramSocket();
-			// Construye la dirección del socket del receptor
-			InetAddress maquina = InetAddress.getByName(args[0]);
-			int puerto = 4000;
-			// Crea el primer mensaje
-			byte [] cadena = args[1].getBytes();
-			DatagramPacket mensaje = new DatagramPacket(cadena,
-					args[1].length(), maquina, puerto);
-			// Envía el primer mensaje
-			elSocket.send(mensaje);
-			// Crea el segundo mensaje
-			cadena = args[2].getBytes();
-			mensaje.setData(cadena);
-			mensaje.setLength(args[2].length());
-			// Envía el segundo mensaje
-			elSocket.send(mensaje);
-			// Cierra su socket
-			elSocket.close();
-		} catch(UnknownHostException e) {
-			System.err.println("Desconocido: " + e.getMessage());
-		} catch(SocketException e) {
-			System.err.println("Socket: " + e.getMessage());
-		} catch(IOException e) {
-			System.err.println("E/S: " + e.getMessage());
-		}
+	
+	private InetAddress ipHost;
+	private DatagramSocket dtSocket;
+	private int iIdMessage;
+
+	public CommClient(String ServerHostName) throws UnknownHostException, SocketException {
+		// host checking
+		ipHost = InetAddress.getByName(ServerHostName);
+		// socket creation
+		dtSocket = new DatagramSocket();
+		iIdMessage = 0;
 	}
+	
+	public int doOperation(Message msRequest, Message msResponse) {
+		msRequest.setiTypeMessage(Data.REQUEST);
+		msRequest.setiIdMessage(iIdMessage++);
+		
+		try {
+			ByteArrayOutputStream baOut = new ByteArrayOutputStream();
+			DataOutputStream dtOut = new DataOutputStream(baOut);
+			
+			// fill fields
+			dtOut.writeInt(msRequest.getiTypeMessage());
+			dtOut.writeInt(msRequest.getiIdMethod());
+			dtOut.writeInt(msRequest.getiIdMessage());
+			dtOut.writeInt(msRequest.getiLengthArgs());
+			dtOut.write(msRequest.getbyArguments(),0,msRequest.getiLengthArgs());
+			dtOut.close();
+			
+			// create packet
+			DatagramPacket pkRequest = new DatagramPacket(baOut.toByteArray(),
+															dtOut.size(), ipHost, Data.PORT);
+			// send the packet
+			dtSocket.send(pkRequest);
+			
+		} catch (IOException e) {
+			System.err.println("I/O: " + e.getMessage());
+		}
+		
+		try {
+			// Create the input buffer
+			byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE] ;
+			DatagramPacket pkResponse = new DatagramPacket(InBuffer,InBuffer.length);
+			
+			// Receive the packet
+			dtSocket.receive(pkResponse);
+			
+			ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
+			DataInputStream dtIn = new DataInputStream(baIn);
+			
+			// extract fields
+			msResponse.setiTypeMessage(dtIn.readInt());
+			msResponse.setiIdMethod(dtIn.readInt());
+			msResponse.setiIdMessage(dtIn.readInt());
+			msResponse.setiLengthArgs(dtIn.readInt());
+			byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
+			dtIn.read(byArguments, 0, msResponse.getiLengthArgs());
+			msResponse.setbyArguments(byArguments);
+			
+			
+		} catch (IOException e) {
+			System.err.println("I/O: " + e.getMessage());
+		}
+		
+		return Data.OK;
+	}
+	
 }
