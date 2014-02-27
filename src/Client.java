@@ -3,13 +3,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 
 public class Client {
+	
+	private static CommClient ccModule;
+	
 	public static void main(String args [] ) {
 		if(args.length<1) System.err.println("Not enough arguments");
 		else{
-			System.out.println("createCommServer");
+			try {
+				ccModule = new CommClient(args[0]);
+			} catch (UnknownHostException | SocketException e) {
+				System.err.println("NET ERROR: " + e.getMessage());
+			}
 		}
 		BufferedReader brComand = new BufferedReader(new InputStreamReader(System.in));
 		try {
@@ -46,15 +55,19 @@ public class Client {
 			return Data.INTERNAL_ERROR;
 		}
 
-		Message msg = new Message();
+		Message msRequest = new Message();
 		byte[] byParams = baParams.toByteArray();
-		msg.setbyArguments(byParams);
-		msg.setiLengthArgs(byParams.length);
-		msg.setiIdMethod(Data.NUEVO);
+		msRequest.setbyArguments(byParams);
+		msRequest.setiLengthArgs(byParams.length);
+		msRequest.setiIdMethod(Data.NUEVO);
 		
+		Message msResponse = new Message();
 		
+		int status=ccModule.doOperation(msRequest, msResponse);
 		
-		return Data.OK;
+		System.out.println("implement msResponse");
+		
+		return status;
 	}
 
 }
