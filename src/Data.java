@@ -9,6 +9,7 @@ public class Data {
 	public static final int OK =0;
 	public static final int UNKNOWN_HOST = 1;
 	public static final int INTERNAL_ERROR = 2;
+	public static final int SERVER_ERROR = 3;
 	
 	// Message types
 	public static final int REQUEST = 0;
@@ -16,4 +17,11 @@ public class Data {
 	
 	// Methods
 	public static final int NUEVO = 1;
+	public static final int QUITA = 2;
+	public static final int INSCRIBE = 3;
+	public static final int PLANTILLA = 4;
+	public static final int REPERTORIO = 5;
+	public static final int JUEGA = 6;
+	public static final int TERMINA = 7;
+	public static final int LISTA = 8;
 }
