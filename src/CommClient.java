@@ -5,6 +5,7 @@ public class CommClient {
 	
 	private InetAddress ipHost;
 	private DatagramSocket dtSocket;
+	//private Integer ClientPort;
 	private int iIdMessage;
 
 	public CommClient(String ServerHostName) throws UnknownHostException, SocketException {
@@ -12,6 +13,7 @@ public class CommClient {
 		ipHost = InetAddress.getByName(ServerHostName);
 		// socket creation
 		dtSocket = new DatagramSocket();
+		//ClientPort = dtSocket.getLocalPort();
 		iIdMessage = 0;
 	}
 	

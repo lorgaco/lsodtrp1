@@ -27,12 +27,12 @@ public class Client {
 				System.err.println("Not enough arguments");
 			}
 			else{
-				String method = args[0].toString().toUpperCase();
+				String method = strComand[0].toString().toUpperCase();
 				if(method.equals("NUEVO")){
-					if(args.length<3) System.err.println("Not enough arguments");
+					if(strComand.length<3) System.err.println("Not enough arguments");
 					else{
-						String designation = args[1].toString();
-						int maximum = Integer.parseInt(args[2]);
+						String designation = strComand[1].toString();
+						int maximum = Integer.parseInt(strComand[2]);
 						int result = nuevo(designation,maximum);
 						System.out.println(result);
 					}
