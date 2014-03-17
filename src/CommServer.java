@@ -2,13 +2,15 @@ import java.net.*;
 import java.io.*;
 
 public class CommServer {
-	private InetAddress ipHost;
+	//private InetAddress ipHost;
 	private DatagramSocket dtSocket;
+	private InetAddress ClientAddr;
+	private Integer ClientPort;
 	private int iIdMessage;
 
 	public CommServer() throws SocketException {
 		// socket creation
-		dtSocket = new DatagramSocket();
+		dtSocket = new DatagramSocket(Data.PORT);
 		iIdMessage = 0;
 		
 	}
@@ -19,6 +21,9 @@ public class CommServer {
 		// create packet
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		dtSocket.receive(pkRequest);
+		
+		ClientAddr = pkRequest.getAddress();
+		ClientPort = pkRequest.getPort();
 		
 		ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtIn = new DataInputStream(baIn);
@@ -57,7 +62,7 @@ public class CommServer {
 			
 			// create packet
 			DatagramPacket pkRequest = new DatagramPacket(baOut.toByteArray(),
-															dtOut.size(), ipHost, Data.PORT);
+															dtOut.size(), ClientAddr, ClientPort);
 			// send the packet
 			dtSocket.send(pkRequest);
 			
