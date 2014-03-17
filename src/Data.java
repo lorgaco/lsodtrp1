@@ -16,4 +16,11 @@ public class Data {
 	
 	// Methods
 	public static final int NUEVO = 1;
+	public static final int QUITA = 2;
+	public static final int INSCRIBE = 3;
+	public static final int PLANTILLA = 4;
+	public static final int REPERTORIO = 5;
+	public static final int JUEGA = 6;
+	public static final int TERMINA = 7;
+	public static final int LISTA = 8;
 }

@@ -15,7 +15,7 @@ public class CommServer {
 	
 	public int getRequest(Message msRequest) throws IOException {
 
-		byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE] ;
+		byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE];
 		// create packet
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		dtSocket.receive(pkRequest);
