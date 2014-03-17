@@ -28,25 +28,85 @@ public class Client {
 		Key="clave";
 		
 		BufferedReader brComand = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			String strComand[] = brComand.readLine().split(" ");
-			if(strComand.length<1){
-				System.err.println("Not enough arguments");
-			}
-			else{
-				String method = strComand[0].toString().toUpperCase();
-				if(method.equals("NUEVO")){
-					if(strComand.length<3) System.err.println("Not enough arguments");
-					else{
-						String designation = strComand[1].toString();
-						int maximum = Integer.parseInt(strComand[2]);
-						int result = nuevo(designation,maximum);
-						System.out.println(result);
+		while(true){
+			try {
+				String strComand[] = brComand.readLine().split(" ");
+				if(strComand.length<1){
+					System.err.println("Not enough arguments");
+				}
+				else{
+					String method = strComand[0].toString().toUpperCase();
+					if(method.equals("NUEVO")){
+						if(strComand.length<3) System.err.println("Not enough arguments");
+						else{
+							String designation = strComand[1].toString();
+							int maximum = Integer.parseInt(strComand[2]);
+							int result = nuevo(designation,maximum);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("QUITA")){
+						if(strComand.length<2) System.err.println("Not enough arguments");
+						else{
+							short code = Short.parseShort(strComand[1].toString());
+							int result = quita(code);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("INSCRIBE")){
+						if(strComand.length<3) System.err.println("Not enough arguments");
+						else{
+							String name = strComand[1].toString();
+							String nick = strComand[2].toString();
+							int result = inscribe(name, nick);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("PLANTILLA")){
+							int result = plantilla();
+							System.out.println(result);
+					}
+					else if(method.equals("REPERTORIO")){
+						if(strComand.length<2) System.err.println("Not enough arguments");
+						else{
+							byte min = Byte.parseByte(strComand[1].toString());
+							int result = repertorio(min);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("JUEGA")){
+						if(strComand.length<3) System.err.println("Not enough arguments");
+						else{
+							String nick = strComand[1].toString();
+							short code = Short.parseShort(strComand[2].toString());
+							int result = juega(nick, code);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("TERMINA")){
+						if(strComand.length<3) System.err.println("Not enough arguments");
+						else{
+							String nick = strComand[1].toString();
+							short code = Short.parseShort(strComand[2].toString());
+							int result = termina(nick, code);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("LISTA")){
+						if(strComand.length<2) System.err.println("Not enough arguments");
+						else{
+							short code = Short.parseShort(strComand[1].toString());
+							int result = lista(code);
+							System.out.println(result);
+						}
+					}
+					else if(method.equals("FINAL")){
+						break;
 					}
 				}
+			} catch (IOException e) {
+				System.err.println("ERROR: " + e.getMessage());
 			}
-		} catch (IOException e) {
-			System.err.println("ERROR: " + e.getMessage());
 		}
 	}
 	
