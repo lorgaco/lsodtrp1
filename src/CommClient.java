@@ -1,10 +1,15 @@
 import java.io.*;
 import java.net.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class CommClient {
+public class CommClient{
+	
 	
 	private InetAddress ipHost;
 	private DatagramSocket dtSocket;
+	private DatagramPacket pkRequest;
+	Timer timer;
 	//private Integer ClientPort;
 	private int iIdMessage;
 
@@ -13,6 +18,7 @@ public class CommClient {
 		ipHost = InetAddress.getByName(ServerHostName);
 		// socket creation
 		dtSocket = new DatagramSocket();
+		dtSocket.setSoTimeout(Data.SOCKET_TIMEOUT);
 		//ClientPort = dtSocket.getLocalPort();
 		iIdMessage = 0;
 	}
@@ -34,13 +40,14 @@ public class CommClient {
 			dtOut.close();
 			
 			// create packet
-			DatagramPacket pkRequest = new DatagramPacket(baOut.toByteArray(),
+			pkRequest = new DatagramPacket(baOut.toByteArray(),
 															dtOut.size(), ipHost, Data.PORT);
 			// send the packet
-			dtSocket.send(pkRequest);
+	    	dtSocket.send(pkRequest);
 			
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
+			return Data.NET_ERROR;
 		}
 		
 		try {
@@ -49,7 +56,10 @@ public class CommClient {
 			DatagramPacket pkResponse = new DatagramPacket(InBuffer,InBuffer.length);
 			
 			// Receive the packet
+			timer = new Timer();
+			timer.schedule(new Wait(dtSocket, pkRequest), 100, 100); //schedule the task to be run at 100 ms time
 			dtSocket.receive(pkResponse);
+			timer.cancel();
 			
 			ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
 			DataInputStream dtIn = new DataInputStream(baIn);
@@ -66,9 +76,42 @@ public class CommClient {
 			
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
+			timer.cancel();
+			return Data.NET_ERROR;
 		}
 		
 		return Data.OK;
 	}
+
+}
+
+class Wait extends TimerTask{
 	
+	
+	private DatagramSocket Socket;
+	private DatagramPacket Packet;
+	int count;
+	int maxPkts;
+    Wait(DatagramSocket dtSocket, DatagramPacket pkRequest)
+    {
+    	Socket = dtSocket;
+    	Packet = pkRequest;
+    	count = 0;
+    	maxPkts = (int) Math.floor((float) (Data.SOCKET_TIMEOUT-Data.SOCKET_RTX_PERIOD)/(float) Data.SOCKET_RTX_PERIOD);
+    }
+
+    public void run()
+    {
+    	try {
+    		if(count >= maxPkts) {
+    			System.err.println("Can't reach server");
+    		} else {
+    			System.out.println("envia");
+				Socket.send(Packet);
+				count++;
+    		}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }

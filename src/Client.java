@@ -15,7 +15,10 @@ public class Client {
 	private static String Key;
 	
 	public static void main(String args [] ) {
-		if(args.length<1) System.err.println("Not enough arguments");
+		if(args.length<1) {
+			System.err.println("Not enough arguments");
+			return;
+		}
 		else{
 			try {
 				ccModule = new CommClient(args[0]);
@@ -29,10 +32,12 @@ public class Client {
 		
 		BufferedReader brComand = new BufferedReader(new InputStreamReader(System.in));
 		while(true){
+			System.out.println("escriba");
 			try {
 				String strComand[] = brComand.readLine().split(" ");
 				if(strComand.length<1){
 					System.err.println("Not enough arguments");
+					break;
 				}
 				else{
 					String method = strComand[0].toString().toUpperCase();
@@ -40,7 +45,10 @@ public class Client {
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
 							String designation = strComand[1].toString();
-							int maximum = Integer.parseInt(strComand[2]);
+							for(int i = 2; i < strComand.length-1; i++) {
+								designation = designation + " " + strComand[i].toString();
+							}
+							int maximum = Integer.parseInt(strComand[strComand.length-1]);
 							int result = nuevo(designation,maximum);
 							System.out.println(result);
 						}
@@ -101,11 +109,13 @@ public class Client {
 						}
 					}
 					else if(method.equals("FINAL")){
+						System.out.println("FINAL");
 						break;
 					}
 				}
 			} catch (IOException e) {
 				System.err.println("ERROR: " + e.getMessage());
+				break;
 			}
 		}
 	}
@@ -138,6 +148,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -183,6 +194,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -228,6 +240,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -272,6 +285,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -320,6 +334,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -373,6 +388,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -418,6 +434,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();
@@ -462,6 +479,7 @@ public class Client {
 		Message msResponse = new Message();
 		
 		int status = ccModule.doOperation(msRequest, msResponse);
+		if(status==Data.NET_ERROR) return Data.NET_ERROR;
 		
 		//================Response Processing================//
 		byte[] byResponse = msResponse.getbyArguments();

@@ -4,12 +4,15 @@ public class Data {
 	public static final int PORT = 4005;
 	public static final int MAX_ARGUMENTS_SIZE = 8000;
 	public static final int MAX_MESSAGE_SIZE = MAX_ARGUMENTS_SIZE + 16; // 4 ints
+	public static final int SOCKET_TIMEOUT = 1000; // in milliseconds
+	public static final int SOCKET_RTX_PERIOD = 100; // in milliseconds
 	
 	// Local response codes
 	public static final int OK =0;
 	public static final int UNKNOWN_HOST = 1;
 	public static final int INTERNAL_ERROR = 2;
 	public static final int SERVER_ERROR = 3;
+	public static final int NET_ERROR = 3;
 	
 	// Message types
 	public static final int REQUEST = 0;
