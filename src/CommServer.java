@@ -1,4 +1,7 @@
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import java.io.*;
 
 public class CommServer {
@@ -6,11 +9,13 @@ public class CommServer {
 	private DatagramSocket dtSocket;
 	private InetAddress ClientAddr;
 	private Integer ClientPort;
+	List<ArrayObject> ResponseList;
 	private int iIdMessage;
 
 	public CommServer() throws SocketException {
 		// socket creation
 		dtSocket = new DatagramSocket(Data.PORT);
+		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
 		
 	}
@@ -23,7 +28,7 @@ public class CommServer {
 		dtSocket.receive(pkRequest);
 		
 		ClientAddr = pkRequest.getAddress();
-		ClientPort = pkRequest.getPort();
+		ClientPort = pkRequest.getPort();		
 		
 		ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtIn = new DataInputStream(baIn);
@@ -36,6 +41,19 @@ public class CommServer {
 		byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
 		dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
 		msRequest.setbyArguments(byArguments);
+		
+		// search for duplicates
+		if(!ResponseList.isEmpty()){
+			ListIterator<ArrayObject> it = ResponseList.listIterator();
+			for(int i = 0; i < ResponseList.size(); i++){
+				ArrayObject pkArray = it.next();
+				if(pkArray.Addr==ClientAddr && pkArray.Port==ClientPort){
+					if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
+						//do stuff
+					}
+				}
+			}
+		}
 		
 		// Update iIdMessage
 		iIdMessage = msRequest.getiIdMessage();
@@ -61,10 +79,18 @@ public class CommServer {
 			dtOut.close();
 			
 			// create packet
-			DatagramPacket pkRequest = new DatagramPacket(baOut.toByteArray(),
+			DatagramPacket pkResponse = new DatagramPacket(baOut.toByteArray(),
 															dtOut.size(), ClientAddr, ClientPort);
+			
+			// save the packet
+			ArrayObject pkArray = new ArrayObject();
+			pkArray.Addr = ClientAddr;
+			pkArray.Port = ClientPort;
+			pkArray.Message = msResponse;
+			ResponseList.add(pkArray);
+			
 			// send the packet
-			dtSocket.send(pkRequest);
+			dtSocket.send(pkResponse);
 			
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
@@ -72,4 +98,10 @@ public class CommServer {
 		return Data.OK;
 		
 	}
+}
+
+class ArrayObject {
+	protected InetAddress Addr;
+	protected Integer Port;
+	protected Message Message;
 }
