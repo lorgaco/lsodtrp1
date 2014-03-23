@@ -27,4 +27,8 @@ public class Data {
 	public static final int JUEGA = 6;
 	public static final int TERMINA = 7;
 	public static final int LISTA = 8;
+	
+	public static final int ALREADY_EXISTS = -1;
+	public static final int DOESNT_EXIST = -2;
+
 }
