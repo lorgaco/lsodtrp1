@@ -55,26 +55,27 @@ public class Flag {
 		}
 	}
 	
-	public int plantilla(Message msRequest) {
+	public String plantilla(Message msRequest) {
 		//byte [] InBuffer = msRequest.getbyArguments();
 		//ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		//DataInputStream dtParams = new DataInputStream(baParams);
-		int resul = method.plantilla();
+		String resul = method.plantilla();
 		return resul;
 	}
 	
-	public int repertorio(Message msRequest) {
+	public String repertorio(Message msRequest) {
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			byte minimum = dtParams.readByte();
-			int resul = method.repertorio(minimum);
+			String resul = method.repertorio(minimum);
 			return resul;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			//return Data.INTERNAL_ERROR;
 		}
+		return null;
 	}
 	
 	public int juega(Message msRequest) {

@@ -44,6 +44,7 @@ public class Dealer {
 	public static void deal(Message msRequest) {
 		int method = msRequest.getiIdMethod();
 		int result = 1;
+		String result2 = null;
 		switch(method) {
 			case 1:
 				result = flag.nuevo(msRequest);
@@ -58,11 +59,11 @@ public class Dealer {
 				System.out.println(result);
 				break;
 			case 4:
-				result = flag.plantilla(msRequest);
+				result2 = flag.plantilla(msRequest);
 				System.out.println(result);
 				break;
 			case 5:
-				result = flag.repertorio(msRequest);
+				result2 = flag.repertorio(msRequest);
 				System.out.println(result);
 				break;
 			case 6:

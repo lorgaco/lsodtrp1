@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -56,11 +57,41 @@ public class Methods {
 		return plantilla_final;
 	}
 	
-	public int repertorio(byte minimum) {
-		return 0;
+	public String repertorio(byte minimum) {
+		String path_fichero = "";
+		ArrayList<String> repertorio = null;
+		repertorio = leer(path_fichero);
+		int min = minimum;
+		for(String temp : repertorio) {
+			String[] parts = temp.split(" ");
+			int part1 = Integer.parseInt(parts[1]);
+			if(part1<min) {
+				repertorio.remove(temp);
+			}
+		}
+		return repertorio.toString();
 	}
 	
 	public int juega(String alias, short code) {
+		String path_fichero = "";
+		File file = new File(path_fichero);
+		try {
+			replaceSelected(file, code);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}/*
+		ArrayList<String> juegos = null;
+		juegos = leer(path_fichero);
+		for(String temp : juegos) {
+			String[] parts = temp.split(" ");
+			int part0 = Integer.parseInt(parts[0]);
+			if(part0==code) {
+				
+				//juegos.
+			}
+		}*/
+		
 		return 0;
 	}
 	
@@ -214,5 +245,32 @@ public class Methods {
 	    } catch (IOException ex) {
 	        ex.printStackTrace();
 	    }
+	}
+	
+	private void replaceSelected(File file, short code) throws IOException {
+
+	    // we need to store all the lines
+	    List<String> lines = new ArrayList<String>();
+
+	    // first, read the file and store the changes
+	    BufferedReader in = new BufferedReader(new FileReader(file));
+	    String line = in.readLine();
+	    while (line != null) {
+	        if (line.startsWith(Integer.toString(code))) {
+	            String sValue = line.substring(line.indexOf(' ')+1).trim();
+	            int nValue = Integer.parseInt(sValue);
+	            line = Integer.toString(code) + " " + (nValue+1);
+	        }
+	        lines.add(line);
+	        line = in.readLine();
+	    }
+	    in.close();
+
+	    // now, write the file again with the changes
+	    PrintWriter out = new PrintWriter(file);
+	    for (String l : lines)
+	        out.println(l);
+	    out.close();
+
 	}
 }
