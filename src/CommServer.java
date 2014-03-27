@@ -25,46 +25,85 @@ public class CommServer {
 		byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE];
 		// create packet
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
-		dtSocket.receive(pkRequest);
 		
-		ClientAddr = pkRequest.getAddress();
-		ClientPort = pkRequest.getPort();		
+		while(true){
+			dtSocket.receive(pkRequest);
 		
-		ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
-		DataInputStream dtIn = new DataInputStream(baIn);
+			ClientAddr = pkRequest.getAddress();
+			ClientPort = pkRequest.getPort();		
 		
-		// extract fields
-		msRequest.setiTypeMessage(dtIn.readInt());
-		msRequest.setiIdMethod(dtIn.readInt());
-		msRequest.setiIdMessage(dtIn.readInt());
-		msRequest.setiLengthArgs(dtIn.readInt());
-		byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
-		dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
-		msRequest.setbyArguments(byArguments);
+			ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
+			DataInputStream dtIn = new DataInputStream(baIn);
 		
-		// search for duplicates
-		if(!ResponseList.isEmpty()){
-			ListIterator<ArrayObject> it = ResponseList.listIterator();
-			for(int i = 0; i < ResponseList.size(); i++){
-				ArrayObject pkArray = it.next();
-				if(pkArray.Addr==ClientAddr && pkArray.Port==ClientPort){
-					if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
-						//do stuff
+			// extract fields
+			msRequest.setiTypeMessage(dtIn.readInt());
+			msRequest.setiIdMethod(dtIn.readInt());
+			msRequest.setiIdMessage(dtIn.readInt());
+			msRequest.setiLengthArgs(dtIn.readInt());
+			byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
+			dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
+			msRequest.setbyArguments(byArguments);
+		
+			// search for duplicates
+			if(!ResponseList.isEmpty()){
+				ListIterator<ArrayObject> it = ResponseList.listIterator();
+				int i = 0;
+				for(i = 0; i < ResponseList.size(); i++){
+					int index = it.nextIndex();
+					ArrayObject pkArray = it.next();
+					if(pkArray.Addr.equals(ClientAddr) && pkArray.Port.equals(ClientPort)){
+						if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
+							if(msRequest.getiTypeMessage()==Data.REQUEST){
+								// resend previous response
+								sendMessage(pkArray.Message);
+							}
+							else if(msRequest.getiTypeMessage()==Data.ACK){
+								// delete acknowled messages
+								ResponseList.remove(index);
+							}
+						}
+						else if(pkArray.Message.getiIdMessage()<msRequest.getiIdMessage()){
+							// delete previous message if exists
+							ResponseList.remove(index);
+							
+							// Update iIdMessage
+							iIdMessage = msRequest.getiIdMessage();
+							return Data.OK;
+						}
 					}
 				}
+				if(i == ResponseList.size()-1){
+					// Update iIdMessage
+					System.out.println("return 1");
+					iIdMessage = msRequest.getiIdMessage();
+					return Data.OK;
+				}
+			}
+			else{
+				// Update iIdMessage
+				iIdMessage = msRequest.getiIdMessage();
+				return Data.OK;
 			}
 		}
-		
-		// Update iIdMessage
-		iIdMessage = msRequest.getiIdMessage();
-
-		return Data.OK;
 	}
 	
 	public int sendReply(Message msResponse) {
 		
 		msResponse.setiTypeMessage(Data.RESPONSE);
 		msResponse.setiIdMessage(iIdMessage);
+		
+		// save the packet
+		ArrayObject pkArray = new ArrayObject();
+		pkArray.Addr = ClientAddr;
+		pkArray.Port = ClientPort;
+		pkArray.Message = msResponse;
+		ResponseList.add(pkArray);
+		
+		return sendMessage(msResponse);
+		
+	}
+	
+	public int sendMessage(Message msResponse){
 		
 		try {
 			ByteArrayOutputStream baOut = new ByteArrayOutputStream();
@@ -81,13 +120,6 @@ public class CommServer {
 			// create packet
 			DatagramPacket pkResponse = new DatagramPacket(baOut.toByteArray(),
 															dtOut.size(), ClientAddr, ClientPort);
-			
-			// save the packet
-			ArrayObject pkArray = new ArrayObject();
-			pkArray.Addr = ClientAddr;
-			pkArray.Port = ClientPort;
-			pkArray.Message = msResponse;
-			ResponseList.add(pkArray);
 			
 			// send the packet
 			dtSocket.send(pkResponse);

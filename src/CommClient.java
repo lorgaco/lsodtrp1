@@ -40,8 +40,8 @@ public class CommClient{
 			dtOut.close();
 			
 			// create packet
-			pkRequest = new DatagramPacket(baOut.toByteArray(),
-															dtOut.size(), ipHost, Data.PORT);
+			pkRequest = new DatagramPacket(baOut.toByteArray(),dtOut.size(), ipHost, Data.PORT);
+			
 			// send the packet
 	    	dtSocket.send(pkRequest);
 			
@@ -74,6 +74,34 @@ public class CommClient{
 			msResponse.setbyArguments(byArguments);
 			
 			
+		} catch (IOException e) {
+			System.err.println("I/O: " + e.getMessage());
+			timer.cancel();
+			return Data.NET_ERROR;
+		}
+		
+		try {
+			Message msAck = new Message();
+			msAck.setiTypeMessage(Data.ACK);
+			msAck.setiIdMessage(msRequest.getiIdMessage());
+			msAck.setiIdMethod(msRequest.getiIdMethod());
+			msAck.setiLengthArgs(0);
+			
+			ByteArrayOutputStream baOut = new ByteArrayOutputStream();
+			DataOutputStream dtOut = new DataOutputStream(baOut);
+			
+			// fill fields
+			dtOut.writeInt(msAck.getiTypeMessage());
+			dtOut.writeInt(msAck.getiIdMethod());
+			dtOut.writeInt(msAck.getiIdMessage());
+			dtOut.writeInt(msAck.getiLengthArgs());
+			dtOut.close();
+						
+			// create packet
+			pkRequest = new DatagramPacket(baOut.toByteArray(),dtOut.size(), ipHost, Data.PORT);
+						
+			// send the packet
+			dtSocket.send(pkRequest);
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
 			timer.cancel();

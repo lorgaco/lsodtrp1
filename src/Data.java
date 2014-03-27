@@ -17,6 +17,7 @@ public class Data {
 	// Message types
 	public static final int REQUEST = 0;
 	public static final int RESPONSE = 1;
+	public static final int ACK = 2;
 	
 	// Methods
 	public static final int NUEVO = 1;
