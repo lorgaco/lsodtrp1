@@ -29,7 +29,13 @@ public class Data {
 	public static final int TERMINA = 7;
 	public static final int LISTA = 8;
 	
+	// File paths
+	public static final String PATH_JUEGOS = "/bd/juegos.txt";
+	public static final String PATH_JUGADORES = "/bd";
+	public static final String PATH_PLAYING = "";
+	
 	public static final int ALREADY_EXISTS = -1;
 	public static final int DOESNT_EXIST = -2;
+	public static final int MAX_ACHIEVED = -3;
 
 }

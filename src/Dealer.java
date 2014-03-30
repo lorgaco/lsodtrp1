@@ -60,11 +60,11 @@ public class Dealer {
 				break;
 			case 4:
 				result2 = flag.plantilla(msRequest);
-				System.out.println(result);
+				System.out.println(result2);
 				break;
 			case 5:
 				result2 = flag.repertorio(msRequest);
-				System.out.println(result);
+				System.out.println(result2);
 				break;
 			case 6:
 				result = flag.juega(msRequest);
@@ -75,8 +75,8 @@ public class Dealer {
 				System.out.println(result);
 				break;
 			case 8:
-				result = flag.lista(msRequest);
-				System.out.println(result);
+				result2 = flag.lista(msRequest);
+				System.out.println(result2);
 				break;
 		}
 	}

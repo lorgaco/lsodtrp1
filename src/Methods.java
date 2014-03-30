@@ -15,19 +15,20 @@ public class Methods {
 	short codigo = 0;
 	
 	public int nuevo(String designation, int maximum) {
-		String path_fichero = "~/lsodtr/prueba.txt";
+		String path_fichero = Data.PATH_JUEGOS;
 		if (buscar(designation, path_fichero) == false) {
-			String contenido = designation + " -> " + Integer.toString(maximum);
+			String contenido = Integer.toString(codigo) + " <- " + designation + " -> " + Integer.toString(maximum);
+			codigo++;
 			System.out.println(contenido);
 			escribir(contenido, path_fichero);
-			return codigo;
+			return codigo-1;
 		} else {
 			return Data.ALREADY_EXISTS;
 		}
 	}
 	
 	public int quita(short code) {
-		String path_fichero = "";
+		String path_fichero = Data.PATH_JUEGOS;
 		if (buscar(code, path_fichero) != null) {
 			String lineToRemove = buscar(code, path_fichero);
 			removeLineFromFile(lineToRemove, path_fichero);
@@ -37,9 +38,9 @@ public class Methods {
 	}
 	
 	public int inscribe(String name, String alias) {
-		String path_fichero = "";
+		String path_fichero = Data.PATH_JUGADORES;
 		if (buscar(name, path_fichero) && buscar(alias, path_fichero) == false) {
-			String contenido = name + " -> " + alias;
+			String contenido = name + " : " + alias;
 			System.out.println(contenido);
 			escribir(contenido, path_fichero);
 			return Data.OK;
@@ -49,16 +50,17 @@ public class Methods {
 	}
 	
 	public String plantilla() {
-		String path_fichero = "";
+		String path_fichero = Data.PATH_JUGADORES;
 		ArrayList<String> plantilla = null;
 		plantilla = leer(path_fichero);
 		Collections.sort(plantilla);
 		String plantilla_final = plantilla.toString();
+		System.out.println(plantilla_final);
 		return plantilla_final;
 	}
 	
 	public String repertorio(byte minimum) {
-		String path_fichero = "";
+		String path_fichero = Data.PATH_JUEGOS;
 		ArrayList<String> repertorio = null;
 		repertorio = leer(path_fichero);
 		int min = minimum;
@@ -69,38 +71,59 @@ public class Methods {
 				repertorio.remove(temp);
 			}
 		}
+		System.out.println(repertorio.toString());
 		return repertorio.toString();
 	}
 	
 	public int juega(String alias, short code) {
-		String path_fichero = "";
+		String path_fichero = Data.PATH_PLAYING;
 		File file = new File(path_fichero);
-		try {
-			replaceSelected(file, code);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}/*
-		ArrayList<String> juegos = null;
-		juegos = leer(path_fichero);
-		for(String temp : juegos) {
-			String[] parts = temp.split(" ");
-			int part0 = Integer.parseInt(parts[0]);
-			if(part0==code) {
-				
-				//juegos.
+		String contenido = Integer.toString(code) + " : " + alias;
+		if(buscar(alias, Data.PATH_JUGADORES) && buscar(Integer.toString(code), Data.PATH_JUEGOS) == true) {
+			if(buscar(contenido, path_fichero) == false) {
+				ArrayList<String> lista = leer(path_fichero);
+				int first_index = lista.indexOf(code);
+				int last_index = lista.lastIndexOf(code);
+				List<String> lista_final = lista.subList(first_index, last_index);
+				ArrayList<String> aux = leer(Data.PATH_JUEGOS);
+				String aux2 = aux.get(aux.indexOf(code)).split(" -> ")[1];
+				int max = Integer.parseInt(aux2);
+				if(lista_final.size()<max) {
+					escribir(contenido, path_fichero);
+					return Data.OK;
+				} else {
+					return Data.MAX_ACHIEVED;
+				}
+				//replaceSelected(file, code, alias, true);
+			} else {
+				return Data.OK;
 			}
-		}*/
+		} else {
+			return Data.DOESNT_EXIST;
+		}
 		
-		return 0;
+		//return 0;
 	}
 	
 	public int termina(String alias, short code) {
+		String path_fichero = Data.PATH_PLAYING;
+		File file = new File(path_fichero);
+		try {
+			replaceSelected(file, code, alias, false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return 0;
 	}
 	
-	public int lista(short code) {
-		return 0;
+	public String lista(short code) {
+		String path_fichero = Data.PATH_PLAYING;
+		ArrayList<String> lista = null;
+		lista = leer(path_fichero);
+		Collections.sort(lista);
+		String lista_final = lista.toString();
+		return lista_final;
 	}
 
 	/* ====================================
@@ -247,7 +270,7 @@ public class Methods {
 	    }
 	}
 	
-	private void replaceSelected(File file, short code) throws IOException {
+	private void replaceSelected(File file, short code, String alias, Boolean add) throws IOException {
 
 	    // we need to store all the lines
 	    List<String> lines = new ArrayList<String>();
@@ -257,9 +280,14 @@ public class Methods {
 	    String line = in.readLine();
 	    while (line != null) {
 	        if (line.startsWith(Integer.toString(code))) {
-	            String sValue = line.substring(line.indexOf(' ')+1).trim();
-	            int nValue = Integer.parseInt(sValue);
-	            line = Integer.toString(code) + " " + (nValue+1);
+	        	if(line.contains(alias)) {
+	        		String sValue = line.substring(line.indexOf(' ')+1).trim();
+	            	int nValue = Integer.parseInt(sValue);
+	            	if(add)
+	            		line = Integer.toString(code) + " " + (nValue+1);
+	            	else
+	            		line = Integer.toString(code) + " " + (nValue-1);
+	        	}
 	        }
 	        lines.add(line);
 	        line = in.readLine();

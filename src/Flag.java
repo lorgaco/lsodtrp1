@@ -108,17 +108,17 @@ public class Flag {
 		}
 	}
 	
-	public int lista(Message msRequest) {
+	public String lista(Message msRequest) {
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			short code = dtParams.readShort();
-			int resul = method.lista(code);
+			String resul = method.lista(code);
 			return resul;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			return Integer.toString(Data.INTERNAL_ERROR);
 		}
 	}
 }
