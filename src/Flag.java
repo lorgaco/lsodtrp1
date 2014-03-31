@@ -10,115 +10,137 @@ public class Flag {
 		method = new Methods();
 	}
 	
-	public int nuevo(Message msRequest) {
+	public Answer nuevo(Message msRequest) {
 		
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			String designation = dtParams.readUTF();
 			int maximum = dtParams.readInt();
-			int resul = method.nuevo(designation, maximum);
-			return resul;
+			answer = method.nuevo(designation, maximum);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
-	public int quita(Message msRequest) {
+	public Answer quita(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			short code = dtParams.readShort();
-			int resul = method.quita(code);
-			return resul;
+			answer = method.quita(code);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
-	public int inscribe(Message msRequest) {
+	public Answer inscribe(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			String name = dtParams.readUTF();
 			String alias = dtParams.readUTF();
-			int resul = method.inscribe(name, alias);
-			return resul;
+			answer = method.inscribe(name, alias);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
-	public String plantilla(Message msRequest) {
+	public Answer plantilla(Message msRequest) {
+		Answer answer = new Answer();
 		//byte [] InBuffer = msRequest.getbyArguments();
 		//ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		//DataInputStream dtParams = new DataInputStream(baParams);
-		String resul = method.plantilla();
-		return resul;
+		answer = method.plantilla();
+		return answer;
 	}
 	
-	public String repertorio(Message msRequest) {
+	public Answer repertorio(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			byte minimum = dtParams.readByte();
-			String resul = method.repertorio(minimum);
-			return resul;
+			answer = method.repertorio(minimum);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
 			//return Data.INTERNAL_ERROR;
 		}
-		return null;
+		//return null;
 	}
 	
-	public int juega(Message msRequest) {
+	public Answer juega(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			String alias = dtParams.readUTF();
 			short code = dtParams.readShort();
-			int resul = method.juega(alias, code);
-			return resul;
+			answer = method.juega(alias, code);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
-	public int termina(Message msRequest) {
+	public Answer termina(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			String alias = dtParams.readUTF();
 			short code = dtParams.readShort();
-			int resul = method.termina(alias, code);
-			return resul;
+			answer = method.termina(alias, code);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
-	public String lista(Message msRequest) {
+	public Answer lista(Message msRequest) {
+		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			short code = dtParams.readShort();
-			String resul = method.lista(code);
-			return resul;
+			answer = method.lista(code);
+			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return Integer.toString(Data.INTERNAL_ERROR);
+			answer.setServer_error(Data.INTERNAL_ERROR);
+			return answer;
+			//return Integer.toString(Data.INTERNAL_ERROR);
 		}
 	}
 }

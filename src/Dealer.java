@@ -23,12 +23,10 @@ public class Dealer {
 		try {
 			csModule.getRequest(msRequest);
 			
-			deal(msRequest);
+			byte [] bArguments = deal(msRequest);
 			
 			Message msResponse = new Message();
-			int requestIdMethod = msRequest.getiIdMethod();
-			byte [] bArguments = new byte[128];
-			msResponse.setiIdMethod(requestIdMethod);
+			msResponse.setiIdMethod(msRequest.getiIdMethod());
 			msResponse.setbyArguments(bArguments);
 			msResponse.setiLengthArgs(bArguments.length);
 			
@@ -41,10 +39,9 @@ public class Dealer {
 		
 	}
 	
-	public static void deal(Message msRequest) {
+	public static byte[] deal(Message msRequest) {
+		Answer result = new Answer();
 		int method = msRequest.getiIdMethod();
-		int result = 1;
-		String result2 = null;
 		switch(method) {
 			case 1:
 				result = flag.nuevo(msRequest);
@@ -59,12 +56,12 @@ public class Dealer {
 				System.out.println(result);
 				break;
 			case 4:
-				result2 = flag.plantilla(msRequest);
-				System.out.println(result2);
+				result = flag.plantilla(msRequest);
+				System.out.println(result);
 				break;
 			case 5:
-				result2 = flag.repertorio(msRequest);
-				System.out.println(result2);
+				result = flag.repertorio(msRequest);
+				System.out.println(result);
 				break;
 			case 6:
 				result = flag.juega(msRequest);
@@ -75,10 +72,11 @@ public class Dealer {
 				System.out.println(result);
 				break;
 			case 8:
-				result2 = flag.lista(msRequest);
-				System.out.println(result2);
+				result = flag.lista(msRequest);
+				System.out.println(result);
 				break;
 		}
+		return result.toByteStruct();
 	}
 
 }

@@ -34,6 +34,7 @@ public class Data {
 	public static final String PATH_JUGADORES = "/bd";
 	public static final String PATH_PLAYING = "";
 	
+	// Errors
 	public static final int ALREADY_EXISTS = -1;
 	public static final int DOESNT_EXIST = -2;
 	public static final int MAX_ACHIEVED = -3;

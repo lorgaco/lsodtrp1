@@ -14,53 +14,72 @@ import java.util.Scanner;
 public class Methods {
 	short codigo = 0;
 	
-	public int nuevo(String designation, int maximum) {
-		String path_fichero = Data.PATH_JUEGOS;
+	public Answer nuevo(String designation, int maximum) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_JUEGOS;
 		if (buscar(designation, path_fichero) == false) {
 			String contenido = Integer.toString(codigo) + " <- " + designation + " -> " + Integer.toString(maximum);
 			codigo++;
 			System.out.println(contenido);
 			escribir(contenido, path_fichero);
-			return codigo-1;
+			answer.setAnswer(Integer.toString(codigo-1));//codigo-1;
+			answer.setError(Data.OK);
+			return answer;
 		} else {
-			return Data.ALREADY_EXISTS;
+			answer.setAnswer(null);
+			answer.setError(Data.ALREADY_EXISTS);
+			return answer;
 		}
 	}
 	
-	public int quita(short code) {
-		String path_fichero = Data.PATH_JUEGOS;
+	public Answer quita(short code) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_JUEGOS;
 		if (buscar(code, path_fichero) != null) {
 			String lineToRemove = buscar(code, path_fichero);
 			removeLineFromFile(lineToRemove, path_fichero);
-			return Data.OK;
+			answer.setAnswer(null);
+			answer.setError(Data.OK);
+			return answer;
 		}
-		return Data.DOESNT_EXIST;
+		answer.setAnswer(null);
+		answer.setError(Data.DOESNT_EXIST);
+		return answer;
 	}
 	
-	public int inscribe(String name, String alias) {
-		String path_fichero = Data.PATH_JUGADORES;
+	public Answer inscribe(String name, String alias) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_JUGADORES;
 		if (buscar(name, path_fichero) && buscar(alias, path_fichero) == false) {
 			String contenido = name + " : " + alias;
 			System.out.println(contenido);
 			escribir(contenido, path_fichero);
-			return Data.OK;
+			answer.setAnswer(null);
+			answer.setError(Data.OK);
+			return answer;
 		} else {
-			return Data.ALREADY_EXISTS;
+			answer.setAnswer(null);
+			answer.setError(Data.ALREADY_EXISTS);
+			return answer;
 		}
 	}
 	
-	public String plantilla() {
-		String path_fichero = Data.PATH_JUGADORES;
+	public Answer plantilla() {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_JUGADORES;
 		ArrayList<String> plantilla = null;
 		plantilla = leer(path_fichero);
 		Collections.sort(plantilla);
 		String plantilla_final = plantilla.toString();
 		System.out.println(plantilla_final);
-		return plantilla_final;
+		answer.setAnswer(plantilla_final);
+		answer.setError(Data.OK);
+		return answer;
 	}
 	
-	public String repertorio(byte minimum) {
-		String path_fichero = Data.PATH_JUEGOS;
+	public Answer repertorio(byte minimum) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_JUEGOS;
 		ArrayList<String> repertorio = null;
 		repertorio = leer(path_fichero);
 		int min = minimum;
@@ -72,58 +91,104 @@ public class Methods {
 			}
 		}
 		System.out.println(repertorio.toString());
-		return repertorio.toString();
+		answer.setAnswer(repertorio.toString());
+		answer.setError(Data.OK);
+		return answer;
 	}
 	
-	public int juega(String alias, short code) {
-		String path_fichero = Data.PATH_PLAYING;
-		File file = new File(path_fichero);
+	public Answer juega(String alias, short code) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_PLAYING;
+		//File file = new File(path_fichero);
 		String contenido = Integer.toString(code) + " : " + alias;
-		if(buscar(alias, Data.PATH_JUGADORES) && buscar(Integer.toString(code), Data.PATH_JUEGOS) == true) {
+		if(buscar(alias, System.getProperty("user.dir") + Data.PATH_JUGADORES) && 
+				buscar(Integer.toString(code), System.getProperty("user.dir") + Data.PATH_JUEGOS) == true) {
 			if(buscar(contenido, path_fichero) == false) {
 				ArrayList<String> lista = leer(path_fichero);
+				Collections.sort(lista);
 				int first_index = lista.indexOf(code);
 				int last_index = lista.lastIndexOf(code);
 				List<String> lista_final = lista.subList(first_index, last_index);
-				ArrayList<String> aux = leer(Data.PATH_JUEGOS);
+				ArrayList<String> aux = leer(System.getProperty("user.dir") + Data.PATH_JUEGOS);
 				String aux2 = aux.get(aux.indexOf(code)).split(" -> ")[1];
 				int max = Integer.parseInt(aux2);
 				if(lista_final.size()<max) {
 					escribir(contenido, path_fichero);
-					return Data.OK;
+					answer.setAnswer(null);
+					answer.setError(Data.OK);
+					return answer;
+					//return Data.OK;
 				} else {
-					return Data.MAX_ACHIEVED;
+					answer.setAnswer(null);
+					answer.setError(Data.MAX_ACHIEVED);
+					return answer;
+					//return Data.MAX_ACHIEVED;
 				}
 				//replaceSelected(file, code, alias, true);
 			} else {
-				return Data.OK;
+				answer.setAnswer(null);
+				answer.setError(Data.OK);
+				return answer;
+				//return Data.OK;
 			}
 		} else {
-			return Data.DOESNT_EXIST;
+			answer.setAnswer(null);
+			answer.setError(Data.DOESNT_EXIST);
+			return answer;
+			//return Data.DOESNT_EXIST;
 		}
 		
 		//return 0;
 	}
 	
-	public int termina(String alias, short code) {
-		String path_fichero = Data.PATH_PLAYING;
-		File file = new File(path_fichero);
-		try {
-			replaceSelected(file, code, alias, false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public Answer termina(String alias, short code) {
+		Answer answer = new Answer();
+		String path_fichero = System.getProperty("user.dir") + Data.PATH_PLAYING;
+		//File file = new File(path_fichero);
+		String contenido = Integer.toString(code) + " : " + alias;
+		if(buscar(alias, System.getProperty("user.dir") + Data.PATH_JUGADORES) && 
+				buscar(Integer.toString(code), System.getProperty("user.dir") + Data.PATH_JUEGOS) == true) {
+			if(buscar(contenido, path_fichero) == true) {
+				removeLineFromFile(contenido, path_fichero);
+				answer.setAnswer(null);
+				answer.setError(Data.OK);
+				return answer;
+				//return Data.OK;
+				//replaceSelected(file, code, alias, true);
+			} else {
+				answer.setAnswer(null);
+				answer.setError(Data.OK);
+				return answer;
+				//return Data.OK;
+			}
+		} else {
+			answer.setAnswer(null);
+			answer.setError(Data.DOESNT_EXIST);
+			return answer;
+			//return Data.DOESNT_EXIST;
 		}
-		return 0;
 	}
 	
-	public String lista(short code) {
+	public Answer lista(short code) {
+		Answer answer = new Answer();
 		String path_fichero = Data.PATH_PLAYING;
 		ArrayList<String> lista = null;
 		lista = leer(path_fichero);
 		Collections.sort(lista);
-		String lista_final = lista.toString();
-		return lista_final;
+		if(lista.contains(code)) {
+			int first_index = lista.indexOf(code);
+			int last_index = lista.lastIndexOf(code);
+			List<String> lista_final = lista.subList(first_index, last_index);
+			String lista_final2 = lista_final.toString();
+			answer.setAnswer(lista_final2);
+			answer.setError(Data.OK);
+			return answer;
+		} else {
+			answer.setAnswer(null);
+			answer.setError(Data.DOESNT_EXIST);
+			return answer;
+		}
+		//return lista_final;
 	}
 
 	/* ====================================
@@ -138,10 +203,10 @@ public class Methods {
             fichero = new FileWriter(nombre_fichero);
             pw = new PrintWriter(fichero);
  
-            for (int i = 0; i < 10; i++) {
-                pw.println(codigo + " " + contenido);
-            	codigo ++;
-            }
+            pw.println(contenido);
+            //pw.append(contenido);
+            pw.flush();
+            System.out.println(contenido);
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,7 +335,7 @@ public class Methods {
 	    }
 	}
 	
-	private void replaceSelected(File file, short code, String alias, Boolean add) throws IOException {
+	/*private void replaceSelected(File file, short code, String alias, Boolean add) throws IOException {
 
 	    // we need to store all the lines
 	    List<String> lines = new ArrayList<String>();
@@ -300,5 +365,5 @@ public class Methods {
 	        out.println(l);
 	    out.close();
 
-	}
+	}*/
 }
