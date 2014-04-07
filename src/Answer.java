@@ -32,7 +32,11 @@ public class Answer {
 		try {
 			dtParams.writeInt(this.error);
 			dtParams.writeInt(this.server_error);
-			dtParams.writeUTF(answer);
+			if(answer == null) {
+				dtParams.writeUTF("OK");
+			} else {
+				dtParams.writeUTF(answer);
+			}
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
 		}
