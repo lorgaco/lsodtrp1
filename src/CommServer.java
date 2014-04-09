@@ -2,6 +2,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.io.*;
 
 public class CommServer {
@@ -15,6 +16,8 @@ public class CommServer {
 	private float fProb;
 	private float fTimeProb;
 	private int iSeconds;
+	
+	private Random generator;
 
 	public CommServer() throws SocketException {
 		// socket creation
@@ -24,6 +27,7 @@ public class CommServer {
 		fProb = 0;
 		fTimeProb = 0;
 		iSeconds = 0;
+		generator = new Random(0);
 		
 	}
 	public CommServer(float fProb) throws SocketException {
@@ -34,6 +38,7 @@ public class CommServer {
 		fProb = fProb;
 		fTimeProb = 0;
 		iSeconds = 0;
+		generator = new Random(0);
 		
 	}
 	public CommServer(float fProb, float fTimeProb, int iSeconds) throws SocketException {
@@ -44,6 +49,7 @@ public class CommServer {
 		fProb = fProb;
 		fTimeProb = fTimeProb;
 		iSeconds = iSeconds;
+		generator = new Random(0);
 		
 	}
 	
@@ -54,7 +60,16 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
-			dtSocket.receive(pkRequest);
+			while(generator.nextFloat()<(fProb/2)){
+				dtSocket.receive(pkRequest);
+				if(generator.nextFloat()<fTimeProb){
+					try {
+						wait(iSeconds*1000);
+					} catch (InterruptedException e) {
+						System.err.println("Queue Simulator: " + e.getMessage());
+					}
+				}
+			}
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		
@@ -126,8 +141,10 @@ public class CommServer {
 		pkArray.Message = msResponse;
 		ResponseList.add(pkArray);
 		
-		return sendMessage(msResponse);
-		
+		if(generator.nextFloat()<(fProb/2)){
+			return sendMessage(msResponse);
+		}
+		else return 0;
 	}
 	
 	public int sendMessage(Message msResponse){

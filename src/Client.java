@@ -42,7 +42,7 @@ public class Client {
 					break;
 				}
 				else{
-					String method = strComand[0].toString().toUpperCase();
+					String method = Data.PromptToMethod(strComand[0].toString());
 					if(method.equals("NUEVO")){
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
@@ -105,6 +105,9 @@ public class Client {
 					else if(method.equals("FINAL")){
 						break;
 					}
+					else if(method.equals("UNKNOWN")){
+						System.out.println("Comando incorrecto");
+					}
 				}
 			} catch (IOException e) {
 				System.err.println("ERROR: " + e.getMessage());
@@ -158,7 +161,7 @@ public class Client {
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				System.out.println("Juego creado con id " + sCode);
 				return status;
 			}
 		} catch (IOException e) {
@@ -206,7 +209,7 @@ public class Client {
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				System.out.println("Juego eliminado");
 				return status;
 			}
 		} catch (IOException e) {
@@ -255,7 +258,7 @@ public class Client {
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				System.out.println("Inscrito");
 				return status;
 			}
 		} catch (IOException e) {
@@ -400,7 +403,7 @@ public class Client {
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				System.out.println("jugando");
 				return status;
 			}
 		} catch (IOException e) {
@@ -449,7 +452,7 @@ public class Client {
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				System.out.println("Desconectado");
 				return status;
 			}
 		} catch (IOException e) {
