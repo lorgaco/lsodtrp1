@@ -12,7 +12,6 @@ public class Dealer {
 	private static int iSeconds;
 	
 	public static void main(String args [] ) {
-		while(!System.in.equals("exit")) {
 			if(args.length<2) System.err.println("Not enough arguments");
 			else{
 				try {
@@ -46,6 +45,7 @@ public class Dealer {
 					System.err.println("NET ERROR: " + e.getMessage());
 				}
 			}
+		while(!System.in.equals("exit")) {
 		//	BufferedReader brComand = new BufferedReader(new InputStreamReader(System.in));
 		
 			Message msRequest = new Message();

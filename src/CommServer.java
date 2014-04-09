@@ -24,9 +24,9 @@ public class CommServer {
 		dtSocket = new DatagramSocket(Data.PORT);
 		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
-		fProb = 0;
-		fTimeProb = 0;
-		iSeconds = 0;
+		this.fProb = 0;
+		this.fTimeProb = 0;
+		this.iSeconds = 0;
 		generator = new Random(0);
 		
 	}
@@ -35,9 +35,9 @@ public class CommServer {
 		dtSocket = new DatagramSocket(Data.PORT);
 		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
-		fProb = fProb;
-		fTimeProb = 0;
-		iSeconds = 0;
+		this.fProb = fProb;
+		this.fTimeProb = 0;
+		this.iSeconds = 0;
 		generator = new Random(0);
 		
 	}
@@ -46,9 +46,9 @@ public class CommServer {
 		dtSocket = new DatagramSocket(Data.PORT);
 		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
-		fProb = fProb;
-		fTimeProb = fTimeProb;
-		iSeconds = iSeconds;
+		this.fProb = fProb;
+		this.fTimeProb = fTimeProb;
+		this.iSeconds = iSeconds;
 		generator = new Random(0);
 		
 	}
@@ -60,7 +60,7 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
-			while(generator.nextFloat()<(fProb/2)){
+			do{
 				dtSocket.receive(pkRequest);
 				if(generator.nextFloat()<fTimeProb){
 					try {
@@ -69,7 +69,7 @@ public class CommServer {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
 				}
-			}
+			}while(generator.nextFloat()<(fProb/2));
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		

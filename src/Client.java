@@ -154,14 +154,14 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println("Juego creado con id " + sCode);
+				System.out.println("Juego creado con id " + sResponse);
 				return status;
 			}
 		} catch (IOException e) {
@@ -202,7 +202,7 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
@@ -251,7 +251,7 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
@@ -272,12 +272,12 @@ public class Client {
 		//================Arguments Packaging================//
 		ByteArrayOutputStream baParams = new ByteArrayOutputStream();
 		DataOutputStream dtParams = new DataOutputStream(baParams);
-		try {
-			dtParams.writeUTF(Key);
-		} catch (IOException e) {
-			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
-		}
+		//try {
+			//dtParams.writeUTF(Key);
+		//} catch (IOException e) {
+			//System.err.println("ERROR: " + e.getMessage());
+			//return Data.INTERNAL_ERROR;
+		//}
 
 		//================Message Sending================//
 		Message msRequest = new Message();
@@ -299,14 +299,17 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				String[] aResponse = sResponse.split(",|]|[");
+				for(int ii=0; ii<aResponse.length; ii++){
+					System.out.println(aResponse[ii]);
+				}
 				return status;
 			}
 		} catch (IOException e) {
@@ -347,14 +350,17 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				String[] aResponse = sResponse.split(",|]|[");
+				for(int ii=0; ii<aResponse.length; ii++){
+					System.out.println(aResponse[ii]);
+				}
 				return status;
 			}
 		} catch (IOException e) {
@@ -396,7 +402,7 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
@@ -445,7 +451,7 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
@@ -493,14 +499,17 @@ public class Client {
 		try {
 			int iError = dtResponse.readInt();
 			int iServerError = dtResponse.readInt();
-			String sCode = dtResponse.readUTF();
+			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
 				System.err.println("SERVER ERROR: " + iServerError);
 				System.err.println("METHOD ERROR: " + iError);
 				return Data.SERVER_ERROR;
 			}
 			else {
-				System.out.println(sCode);
+				String[] aResponse = sResponse.split(",|]|[");
+				for(int ii=0; ii<aResponse.length; ii++){
+					System.out.println(aResponse[ii]);
+				}
 				return status;
 			}
 		} catch (IOException e) {

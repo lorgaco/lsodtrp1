@@ -74,6 +74,8 @@ public class Data {
 			return "TERMINA";
 		if(Prompt.equals("L") || Prompt.equals("LI") || Prompt.equals("LIS") || Prompt.equals("LIST") || Prompt.equals("LISTA"))
 			return "LISTA";
+		if(Prompt.equals("F") || Prompt.equals("FI") || Prompt.equals("FIN") || Prompt.equals("FINA") || Prompt.equals("FINAL"))
+			return "FINAL";
 		return "UNKNOWN";
 	}
 }
