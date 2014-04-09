@@ -6,12 +6,40 @@ public class Dealer {
 	
 	private static CommServer csModule;
 	private static Flag flag;
+	private static String Key;
+	private static float fProb;
+	private static float fTimeProb;
+	private static int iSeconds;
 	
 	public static void main(String args [] ) {
 		while(!System.in.equals("exit")) {
-			if(args.length>1) System.err.println("Not enough arguments");
+			if(args.length<2) System.err.println("Not enough arguments");
 			else{
 				try {
+					if(args[0].equals("-k") || args[1].equals("-K")) {
+						Key=args[1];
+					}
+					else {
+						System.err.println("key not provided");
+					}
+					if(args.length>3) {
+						if(args[2].equals("-p") || args[2].equals("-P")) {
+							fProb=Float.parseFloat(args[3]);
+							if(args.length>6 && (args[4].equals("-t") || args[4].equals("-T"))) {
+									fTimeProb=Float.parseFloat(args[5]);
+									iSeconds=Integer.parseInt(args[6]);
+							}
+						}
+						else if(args[2].equals("-t") || args[2].equals("-T")) {
+							fTimeProb=Float.parseFloat(args[3]);
+							iSeconds=Integer.parseInt(args[4]);
+							if(args.length>6 && (args[5].equals("-t") || args[5].equals("-T"))) {
+								fTimeProb=Float.parseFloat(args[6]);
+								iSeconds=Integer.parseInt(args[7]);
+							}
+						}
+					}
+					
 					csModule = new CommServer();
 					flag = new Flag();
 				} catch (SocketException e) {

@@ -11,12 +11,39 @@ public class CommServer {
 	private Integer ClientPort;
 	List<ArrayObject> ResponseList;
 	private int iIdMessage;
+	
+	private float fProb;
+	private float fTimeProb;
+	private int iSeconds;
 
 	public CommServer() throws SocketException {
 		// socket creation
 		dtSocket = new DatagramSocket(Data.PORT);
 		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
+		fProb = 0;
+		fTimeProb = 0;
+		iSeconds = 0;
+		
+	}
+	public CommServer(float fProb) throws SocketException {
+		// socket creation
+		dtSocket = new DatagramSocket(Data.PORT);
+		ResponseList = new ArrayList<ArrayObject>();
+		iIdMessage = 0;
+		fProb = fProb;
+		fTimeProb = 0;
+		iSeconds = 0;
+		
+	}
+	public CommServer(float fProb, float fTimeProb, int iSeconds) throws SocketException {
+		// socket creation
+		dtSocket = new DatagramSocket(Data.PORT);
+		ResponseList = new ArrayList<ArrayObject>();
+		iIdMessage = 0;
+		fProb = fProb;
+		fTimeProb = fTimeProb;
+		iSeconds = iSeconds;
 		
 	}
 	
