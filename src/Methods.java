@@ -111,31 +111,7 @@ public class Methods {
 				lista = leer2(playing);
 				Collections.sort(lista);
 				int ii = 0;
-				/*int first = 0;
 				
-				// TODO esto se puede mejorar seguro
-				for (ii=0; ii<lista.size(); ii++) {
-					if(lista.get(ii).startsWith(Integer.toString(code))) {
-						first = ii;
-						break;
-					}
-				}
-				int last = 0;
-				for (ii=0; ii<lista.size(); ii++) {
-					if(lista.get(ii).startsWith(Integer.toString(code + 1))) {
-						last = ii;
-						break;
-					}
-				}
-				if(last==0 && first!=0) last=lista.size();
-				// end to do (pero funciona)
-				
-				List<String> lista_final = new ArrayList<String>();
-
-				System.out.println(" ");
-				System.out.println("FIRST = " + Integer.toString(first) + " >> LAST = " + Integer.toString(last));
-				
-				lista_final = lista.subList(first, last);*/
 				List<String> lista_final = new ArrayList<String>();
 				lista_final = subLista(lista, code);
 				
@@ -210,6 +186,7 @@ public class Methods {
 		ArrayList<String> lista = new ArrayList<String>();
 		lista = leer2(playing);
 		Collections.sort(lista);
+		printhelp(lista);
 		if(buscar2(Integer.toString(code), lista)) {
 			List<String> lista_final = new ArrayList<String>();
 			lista_final = subLista(lista, code);
@@ -288,7 +265,8 @@ public class Methods {
 		}
 		int last = 0;
 		for (ii=0; ii<lista.size(); ii++) {
-			if(lista.get(ii).startsWith(Integer.toString(code + 1))) {
+			//if(lista.get(ii).startsWith(Integer.toString(code + 1))) {
+			if(Integer.parseInt(lista.get(ii).split(" ")[0]) > code) {
 				last = ii;
 				break;
 			}
