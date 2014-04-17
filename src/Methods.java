@@ -77,15 +77,18 @@ public class Methods {
 		repertorio = leer2(juegos);
 		System.out.println(repertorio);
 		int min = minimum;
+		ArrayList<String> repertorio2 = new ArrayList<String>();
 		for(String temp : repertorio) {
 			String[] parts = temp.split(" -> ");
 			int part1 = Integer.parseInt(parts[1]);
-			if(part1<min) {
-				repertorio.remove(temp);
+			if(part1>min) {
+				repertorio2.add(temp);
+				//repertorio.remove(temp);
 			}
 		}
-		System.out.println(repertorio.toString());
-		answer.setAnswer(repertorio.toString());
+		System.out.println("RESULTADO REPERTORIO");
+		System.out.println(repertorio2.toString());
+		answer.setAnswer(repertorio2.toString());
 		answer.setError(Data.OK);
 		return answer;
 	}
