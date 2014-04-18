@@ -156,8 +156,8 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
@@ -204,8 +204,8 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
@@ -253,8 +253,8 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
@@ -301,12 +301,12 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
-				String[] aResponse = sResponse.split(",|]|[");
+				String[] aResponse = sResponse.split("(, )|\\]|\\[");
 				for(int ii=0; ii<aResponse.length; ii++){
 					System.out.println(aResponse[ii]);
 				}
@@ -352,12 +352,12 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
-				String[] aResponse = sResponse.split(",|]|[");
+				String[] aResponse = sResponse.split("(, )|\\]|\\[");
 				for(int ii=0; ii<aResponse.length; ii++){
 					System.out.println(aResponse[ii]);
 				}
@@ -404,8 +404,8 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
@@ -453,8 +453,8 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
@@ -501,12 +501,12 @@ public class Client {
 			int iServerError = dtResponse.readInt();
 			String sResponse = dtResponse.readUTF();
 			if(iError!=Data.OK  || iServerError!=Data.OK) {
-				System.err.println("SERVER ERROR: " + iServerError);
-				System.err.println("METHOD ERROR: " + iError);
+				System.err.println("SERVER ERROR: " + Data.ErrorToString(iServerError));
+				System.err.println("METHOD ERROR: " + Data.ErrorToString(iError));
 				return Data.SERVER_ERROR;
 			}
 			else {
-				String[] aResponse = sResponse.split(",|]|[");
+				String[] aResponse = sResponse.split("(, )|\\]|\\[");
 				for(int ii=0; ii<aResponse.length; ii++){
 					System.out.println(aResponse[ii]);
 				}

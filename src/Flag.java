@@ -60,7 +60,6 @@ public class Flag {
 			System.err.println("ERROR: " + e.getMessage());
 			answer.setServer_error(Data.INTERNAL_ERROR);
 			return answer;
-			//return Data.INTERNAL_ERROR;
 		}
 	}
 	
