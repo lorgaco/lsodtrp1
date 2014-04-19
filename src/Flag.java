@@ -10,7 +10,7 @@ public class Flag {
 		method = new Methods();
 	}
 	
-	public Answer nuevo(Message msRequest) {
+	public Answer nuevo(Message msRequest, String key_server) {
 		
 		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
@@ -19,7 +19,13 @@ public class Flag {
 		try {
 			String designation = dtParams.readUTF();
 			int maximum = dtParams.readInt();
-			answer = method.nuevo(designation, maximum);
+            String key_client = dtParams.readUTF();
+            if(key_client.equals(key_server))
+			    answer = method.nuevo(designation, maximum);
+            else {
+                answer.setAnswer(null);
+                answer.setError(Data.AUTENTICATION_FAILED);
+            }
 			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
@@ -29,14 +35,20 @@ public class Flag {
 		}
 	}
 	
-	public Answer quita(Message msRequest) {
+	public Answer quita(Message msRequest, String key_server) {
 		Answer answer = new Answer();
 		byte [] InBuffer = msRequest.getbyArguments();
 		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			short code = dtParams.readShort();
-			answer = method.quita(code);
+            String key_client = dtParams.readUTF();
+            if(key_client.equals(key_server))
+			    answer = method.quita(code);
+            else {
+                answer.setAnswer(null);
+                answer.setError(Data.AUTENTICATION_FAILED);
+            }
 			return answer;
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
@@ -63,13 +75,25 @@ public class Flag {
 		}
 	}
 	
-	public Answer plantilla(Message msRequest) {
+	public Answer plantilla(Message msRequest, String key_server) {
 		Answer answer = new Answer();
-		//byte [] InBuffer = msRequest.getbyArguments();
-		//ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
-		//DataInputStream dtParams = new DataInputStream(baParams);
-		answer = method.plantilla();
-		return answer;
+		byte [] InBuffer = msRequest.getbyArguments();
+		ByteArrayInputStream baParams = new ByteArrayInputStream(InBuffer);
+		DataInputStream dtParams = new DataInputStream(baParams);
+        try {
+            String key_client = dtParams.readUTF();
+            if (key_client.equals(key_server))
+                answer = method.plantilla();
+            else {
+                answer.setAnswer(null);
+                answer.setError(Data.AUTENTICATION_FAILED);
+            }
+            return answer;
+        } catch (IOException e) {
+            System.err.println("ERROR: " + e.getMessage());
+            answer.setServer_error(Data.INTERNAL_ERROR);
+            return answer;
+        }
 	}
 	
 	public Answer repertorio(Message msRequest) {

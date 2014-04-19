@@ -17,6 +17,7 @@ public class Data {
 	public static final int ALREADY_EXISTS = -1;
 	public static final int DOESNT_EXIST = -2;
 	public static final int MAX_ACHIEVED = -3;
+    public static final int AUTENTICATION_FAILED = -4;
 	
 	// Message types
 	public static final int REQUEST = 0;
@@ -48,6 +49,7 @@ public class Data {
 		case ALREADY_EXISTS: return "ALREADY_EXISTS";
 		case DOESNT_EXIST: return "DOESNT_EXIST";
 		case MAX_ACHIEVED: return "MAX_ACHIEVED";
+        case AUTENTICATION_FAILED: return "AUTENTICATION_FAILED";
 		default: return "UNKNOWN_ERROR";
 		}
 	}
