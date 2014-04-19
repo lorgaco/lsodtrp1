@@ -101,9 +101,9 @@ public class Methods {
 		//System.out.println("CODE = " + Integer.toString(code));
 		
 		if(buscar2(alias, jugadores)) System.out.println("TRUE JUGADORES");
-		if(buscar2(Integer.toString(code), juegos)) System.out.println("TRUE JUEGOS");
+		if(buscar2(Integer.toString(code) + " <- ", juegos)) System.out.println("TRUE JUEGOS");
 		
-		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code), juegos)) {
+		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
 			//System.out.println("ENTRA 1");
 			if(!buscar2(contenido, playing)) {
 				//System.out.println("ENTRA 2");
@@ -162,7 +162,7 @@ public class Methods {
 	public Answer termina(String alias, short code) {
 		Answer answer = new Answer();
 		String contenido = Integer.toString(code) + " : " + alias;
-		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code), juegos)) {
+		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
 			if(buscar2(contenido, playing)) {
 				playing.remove(playing.indexOf(contenido));
 				printhelp(playing);
@@ -171,7 +171,7 @@ public class Methods {
 				return answer;
 			} else {
 				answer.setAnswer(null);
-				answer.setError(Data.OK);
+				answer.setError(Data.DOESNT_EXIST);
 				return answer;
 			}
 		} else {
@@ -184,11 +184,15 @@ public class Methods {
 	public Answer lista(short code) {
 		Answer answer = new Answer();
 		ArrayList<String> lista = new ArrayList<String>();
+        ArrayList<String> lista2 = new ArrayList<String>();
 		lista = leer2(playing);
+        lista2 = leer2(juegos);
 		Collections.sort(lista);
 		printhelp(lista);
-		if(buscar2(Integer.toString(code), lista)) {
+		if(buscar2(Integer.toString(code) + " <- ", lista2)) {
 			List<String> lista_final = new ArrayList<String>();
+            System.out.println("LISTA SIZE: " + lista.size());
+            //System.out.println(lista.size());
 			lista_final = subLista(lista, code);
 			
 			String lista_final2 = lista_final.toString();
@@ -232,7 +236,10 @@ public class Methods {
 		int ii = 0;
 		try {
 			for (ii=0; ii<fich.size(); ii++) {
-				if(fich.get(ii).contains(contenido)) return true;
+				if(fich.get(ii).contains(contenido)) {
+                    System.out.println("BUSCAR found: --> " + contenido + " <-- in: --> " + fich.get(ii));
+                    return true;
+                }
 			}
 			//result = fich.contains(contenido);
 		} catch(NullPointerException e) {
@@ -258,18 +265,29 @@ public class Methods {
 		int ii = 0;
 		int first = 0;
 		for (ii=0; ii<lista.size(); ii++) {
+            // If there are more elements in the List
 			if(lista.get(ii).startsWith(Integer.toString(code))) {
 				first = ii;
 				break;
 			}
+            // If it's the end of the List
+            if(ii == lista.size()-1) {
+                first = ii+1;
+                break;
+            }
 		}
 		int last = 0;
 		for (ii=0; ii<lista.size(); ii++) {
-			//if(lista.get(ii).startsWith(Integer.toString(code + 1))) {
-			if(Integer.parseInt(lista.get(ii).split(" ")[0]) > code) {
+			// If there are more elements in the List
+			if(Integer.parseInt(lista.get(ii).split(" ")[0]) > code && ii >= first) {
 				last = ii;
 				break;
 			}
+            // If it's the end of the List
+            if(ii == lista.size()-1) {
+                last = ii+1;
+                break;
+            }
 		}
 		if(last==0 && first!=0) last=lista.size();
 		// end to do (pero funciona)
