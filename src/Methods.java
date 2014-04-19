@@ -275,7 +275,6 @@ public class Methods {
                 first = ii+1;
                 break;
             }
-            
 		}
 		int last = 0;
 		for (ii=0; ii<lista.size(); ii++) {
