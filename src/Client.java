@@ -68,9 +68,12 @@ public class Client {
 					else if(method.equals("INSCRIBE")){
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
-							String name = strComand[1].toString();
-							String nick = strComand[2].toString();
-							inscribe(name, nick);
+                            String name = strComand[1].toString();
+                            for(int i = 2; i < strComand.length-1; i++) {
+                                name = name + " " + strComand[i].toString();
+                            }
+                            String alias = strComand[strComand.length-1].toString();
+							inscribe(name, alias);
 						}
 					}
 					else if(method.equals("PLANTILLA")){
