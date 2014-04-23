@@ -28,7 +28,7 @@ public class Client {
                         System.out.println("Admin key: " + Key);
 					}
 				}
-			} catch (UnknownHostException | SocketException e) {
+			} catch (Exception e) {
 				System.err.println("NET ERROR: " + e.getMessage());
 			}
 		}

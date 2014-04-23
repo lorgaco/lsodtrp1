@@ -5,6 +5,8 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.io.*;
 
+import static java.lang.Thread.sleep;
+
 public class CommServer {
 	//private InetAddress ipHost;
 	private DatagramSocket dtSocket;
@@ -19,28 +21,6 @@ public class CommServer {
 	
 	private Random generator;
 
-	public CommServer() throws SocketException {
-		// socket creation
-		dtSocket = new DatagramSocket(Data.PORT);
-		ResponseList = new ArrayList<ArrayObject>();
-		iIdMessage = 0;
-		this.fProb = 0;
-		this.fTimeProb = 0;
-		this.iSeconds = 0;
-		generator = new Random(0);
-		
-	}
-	public CommServer(float fProb) throws SocketException {
-		// socket creation
-		dtSocket = new DatagramSocket(Data.PORT);
-		ResponseList = new ArrayList<ArrayObject>();
-		iIdMessage = 0;
-		this.fProb = fProb;
-		this.fTimeProb = 0;
-		this.iSeconds = 0;
-		generator = new Random(0);
-		
-	}
 	public CommServer(float fProb, float fTimeProb, int iSeconds) throws SocketException {
 		// socket creation
 		dtSocket = new DatagramSocket(Data.PORT);
@@ -62,9 +42,12 @@ public class CommServer {
 		while(true){
 			do{
 				dtSocket.receive(pkRequest);
-				if(generator.nextFloat()<fTimeProb){
+                System.out.println("prob: " + fTimeProb);
+                float gen = generator.nextFloat();
+                System.out.println("res: " + gen);
+				if(gen<fTimeProb){
 					try {
-						wait(iSeconds*1000);
+						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
