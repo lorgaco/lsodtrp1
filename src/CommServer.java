@@ -41,12 +41,15 @@ public class CommServer {
 		
 		while(true){
             boolean entra = true;
-            while(generator.nextFloat()<=fProb || entra){
+            float gen = 0;
+            while(gen<=fProb || entra){
+                System.out.println("gen: " + gen);
+                gen = generator.nextFloat();
                 entra = false;
 				dtSocket.receive(pkRequest);
 				if(generator.nextFloat()<fTimeProb){
 					try {
-						wait(iSeconds * 1000);
+						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
@@ -123,7 +126,7 @@ public class CommServer {
 		pkArray.Message = msResponse;
 		ResponseList.add(pkArray);
 		
-		if(generator.nextFloat()<(fProb/2)){
+		if(generator.nextFloat()<(fProb)){
 			return sendMessage(msResponse);
 		}
 		else return 0;

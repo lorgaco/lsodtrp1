@@ -59,7 +59,7 @@ public class CommClient{
 			
 			// Receive the packet
 			timer = new Timer();
-			timer.schedule(new Wait(dtSocket, pkRequest), 100, 100); //schedule the task to be run at 100 ms time
+			timer.schedule(new Wait(dtSocket, pkRequest), Data.SOCKET_RTX_PERIOD, Data.SOCKET_RTX_PERIOD); //schedule the task to be run at SOCKET_RTX_PERIOD ms time
             do {
                 dtSocket.receive(pkResponse);
                 // extract fields 1
