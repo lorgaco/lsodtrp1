@@ -40,18 +40,18 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
-            float gen = 0;
-			do{
+            boolean entra = true;
+            while(generator.nextFloat()<=fProb || entra){
+                entra = false;
 				dtSocket.receive(pkRequest);
-                System.out.println("prob: " + fProb + "res: " + gen);
 				if(generator.nextFloat()<fTimeProb){
 					try {
-						sleep(iSeconds * 1000);
+						wait(iSeconds * 1000);
 					} catch (InterruptedException e) {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
 				}
-			}while((gen=generator.nextFloat())<=fProb);
+			}
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		
