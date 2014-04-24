@@ -127,20 +127,20 @@ class Wait extends TimerTask{
     	Socket = dtSocket;
     	Packet = pkRequest;
     	count = 0;
-    	maxPkts = (int) Math.floor((float) (Data.SOCKET_TIMEOUT-Data.SOCKET_RTX_PERIOD)/(float) Data.SOCKET_RTX_PERIOD);
+    	//maxPkts = (int) Math.floor((float) (Data.SOCKET_TIMEOUT-Data.SOCKET_RTX_PERIOD)/(float) Data.SOCKET_RTX_PERIOD);
     }
 
     public void run()
     {
     	try {
-    		if(count >= maxPkts) {
-    			System.err.println("Can't reach server");
-                this.cancel();
-    		} else {
+    		//if(count >= maxPkts) {
+    		//	System.err.println("Can't reach server");
+            //    this.cancel();
+    		//} else {
     			System.out.println("envia");
 				Socket.send(Packet);
-				count++;
-    		}
+			//	count++;
+    		//}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
