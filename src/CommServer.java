@@ -42,12 +42,13 @@ public class CommServer {
 		while(true){
             boolean entra = true;
             float gen = 0;
-            while(gen<=fProb || entra){
+            while(gen<fProb || entra){
                 System.out.println("gen: " + gen);
                 gen = generator.nextFloat();
                 entra = false;
 				dtSocket.receive(pkRequest);
 				if(generator.nextFloat()<fTimeProb){
+                    System.out.println("sleep");
 					try {
 						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {
