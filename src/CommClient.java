@@ -66,7 +66,7 @@ public class CommClient{
                 msResponse.setiTypeMessage(dtIn.readInt());
                 msResponse.setiIdMethod(dtIn.readInt());
                 msResponse.setiIdMessage(dtIn.readInt());
-            }while(msResponse.getiIdMessage()!=iIdMessage);
+            }while(msResponse.getiIdMessage()!=iIdMessage-1);
 			timer.cancel();
 
             // extract fields 2
