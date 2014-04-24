@@ -41,10 +41,8 @@ public class CommServer {
 		
 		while(true){
             boolean entra = true;
-            float gen = 0;
-            while(gen<fProb || entra){
-                System.out.println("gen: " + gen);
-                gen = generator.nextFloat();
+            while(generator.nextFloat()<fProb || entra){
+                if(!entra) System.out.println("tira");
                 entra = false;
 				dtSocket.receive(pkRequest);
 				if(generator.nextFloat()<fTimeProb){
@@ -102,7 +100,6 @@ public class CommServer {
 				}
 				if(i == ResponseList.size()-1){
 					// Update iIdMessage
-					System.out.println("return 1");
 					iIdMessage = msRequest.getiIdMessage();
 					return Data.OK;
 				}
