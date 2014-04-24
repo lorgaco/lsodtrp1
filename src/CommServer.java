@@ -40,9 +40,10 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
+            float gen = 0;
 			do{
 				dtSocket.receive(pkRequest);
-                System.out.println("prob: " + fProb);
+                System.out.println("prob: " + fProb + "res: " + gen);
 				if(generator.nextFloat()<fTimeProb){
 					try {
 						sleep(iSeconds * 1000);
@@ -50,7 +51,7 @@ public class CommServer {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
 				}
-			}while(generator.nextFloat()<(fProb/2));
+			}while((gen=generator.nextFloat())<=fProb);
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		

@@ -44,7 +44,7 @@ public class Dealer {
                         }
 					}
 					
-					csModule = new CommServer(fProb, fTimeProb, iSeconds);
+					csModule = new CommServer(fProb/2, fTimeProb, iSeconds);
 					flag = new Flag();
 				} catch (SocketException e) {
 					System.err.println("NET ERROR: " + e.getMessage());
