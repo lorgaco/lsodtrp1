@@ -54,20 +54,22 @@ public class CommClient{
 			// Create the input buffer
 			byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE] ;
 			DatagramPacket pkResponse = new DatagramPacket(InBuffer,InBuffer.length);
+            ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
+            DataInputStream dtIn = new DataInputStream(baIn);
 			
 			// Receive the packet
 			timer = new Timer();
 			timer.schedule(new Wait(dtSocket, pkRequest), 100, 100); //schedule the task to be run at 100 ms time
-			dtSocket.receive(pkResponse);
+            do {
+                dtSocket.receive(pkResponse);
+                // extract fields 1
+                msResponse.setiTypeMessage(dtIn.readInt());
+                msResponse.setiIdMethod(dtIn.readInt());
+                msResponse.setiIdMessage(dtIn.readInt());
+            }while(msResponse.getiIdMessage()!=iIdMessage);
 			timer.cancel();
-			
-			ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
-			DataInputStream dtIn = new DataInputStream(baIn);
-			
-			// extract fields
-			msResponse.setiTypeMessage(dtIn.readInt());
-			msResponse.setiIdMethod(dtIn.readInt());
-			msResponse.setiIdMessage(dtIn.readInt());
+
+            // extract fields 2
 			msResponse.setiLengthArgs(dtIn.readInt());
 			byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
 			dtIn.read(byArguments, 0, msResponse.getiLengthArgs());
