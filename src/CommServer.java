@@ -42,10 +42,8 @@ public class CommServer {
 		while(true){
 			do{
 				dtSocket.receive(pkRequest);
-                System.out.println("prob: " + fTimeProb);
-                float gen = generator.nextFloat();
-                System.out.println("res: " + gen);
-				if(gen<fTimeProb){
+                System.out.println("prob: " + fProb);
+				if(generator.nextFloat()<fTimeProb){
 					try {
 						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {

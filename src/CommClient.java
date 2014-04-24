@@ -135,6 +135,7 @@ class Wait extends TimerTask{
     	try {
     		if(count >= maxPkts) {
     			System.err.println("Can't reach server");
+                this.cancel();
     		} else {
     			System.out.println("envia");
 				Socket.send(Packet);
