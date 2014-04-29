@@ -27,8 +27,16 @@ public class Client {
 						Key=args[2];
                         System.out.println("Admin key: " + Key);
 					}
+					else {
+						Key = "0";
+						System.out.println("No admin key");
+					}
 				}
-			} catch (UnknownHostException | SocketException e) {
+				else {
+					Key = "0";
+					System.out.println("No admin key");
+				}
+			} catch (Exception e) {
 				System.err.println("NET ERROR: " + e.getMessage());
 			}
 		}
@@ -53,24 +61,44 @@ public class Client {
 							for(int i = 2; i < strComand.length-1; i++) {
 								designation = designation + " " + strComand[i].toString();
 							}
-							int maximum = Integer.parseInt(strComand[strComand.length-1]);
-							nuevo(designation,maximum);
+							if(designation.length() > 30) System.err.println("FORMAR ERROR > 30 characters");
+							else {
+								try {
+									int maximum = Integer.parseInt(strComand[strComand.length-1]);
+									nuevo(designation,maximum);
+								} catch (Exception e) {
+									System.err.println("FORMAT ERROR: " + e.getMessage());
+								}
+							}
 						}
 					}
 					else if(method.equals("QUITA")){
                         if(Key == null) System.out.println("This operation can only be done by Admin");
 						else if(strComand.length<2) System.err.println("Not enough arguments");
 						else{
-							short code = Short.parseShort(strComand[1].toString());
-							quita(code);
+							try {
+								short code = Short.parseShort(strComand[1].toString());
+								quita(code);
+							} catch (Exception e) {
+								System.err.println("FORMAT ERROR: " + e.getMessage());
+							}
 						}
 					}
 					else if(method.equals("INSCRIBE")){
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
-							String name = strComand[1].toString();
-							String nick = strComand[2].toString();
-							inscribe(name, nick);
+                            String name = strComand[1].toString();
+                            for(int i = 2; i < strComand.length-1; i++) {
+                                name = name + " " + strComand[i].toString();
+                            }
+							if(name.length() > 48) System.err.println("FORMAT ERROR > 48 characters");
+							else {
+                            	String alias = strComand[strComand.length-1].toString();
+								if(alias.length() > 8) System.err.println("FORMAT ERROR > 8 characters");
+								else {
+									inscribe(name, alias);
+								}
+							}
 						}
 					}
 					else if(method.equals("PLANTILLA")){
@@ -80,31 +108,47 @@ public class Client {
 					else if(method.equals("REPERTORIO")){
 						if(strComand.length<2) System.err.println("Not enough arguments");
 						else{
-							byte min = Byte.parseByte(strComand[1].toString());
-							repertorio(min);
+							try {
+								byte min = Byte.parseByte(strComand[1].toString());
+								repertorio(min);
+							} catch (Exception e) {
+								System.err.println("FORMAT ERROR: " + e.getMessage());
+							}
 						}
 					}
 					else if(method.equals("JUEGA")){
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
 							String nick = strComand[1].toString();
-							short code = Short.parseShort(strComand[2].toString());
-							juega(nick, code);
+							try {
+								short code = Short.parseShort(strComand[2].toString());
+								juega(nick, code);
+							} catch (Exception e) {
+								System.err.println("FORMAT ERROR: " + e.getMessage());
+							}
 						}
 					}
 					else if(method.equals("TERMINA")){
 						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
 							String nick = strComand[1].toString();
-							short code = Short.parseShort(strComand[2].toString());
-							termina(nick, code);
+							try {
+								short code = Short.parseShort(strComand[2].toString());
+								termina(nick, code);
+							} catch (Exception e) {
+								System.err.println("FORMAT ERROR: " + e.getMessage());
+							}
 						}
 					}
 					else if(method.equals("LISTA")){
 						if(strComand.length<2) System.err.println("Not enough arguments");
 						else{
-							short code = Short.parseShort(strComand[1].toString());
-							lista(code);
+							try {
+								short code = Short.parseShort(strComand[1].toString());
+								lista(code);
+							} catch (Exception e) {
+								System.err.println("FORMAT ERROR: " + e.getMessage());
+							}
 						}
 					}
 					else if(method.equals("FINAL")){

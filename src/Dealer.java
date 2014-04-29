@@ -33,14 +33,18 @@ public class Dealer {
 						else if(args[2].equals("-t") || args[2].equals("-T")) {
 							fTimeProb=Float.parseFloat(args[3]);
 							iSeconds=Integer.parseInt(args[4]);
-							if(args.length>6 && (args[5].equals("-t") || args[5].equals("-T"))) {
-								fTimeProb=Float.parseFloat(args[6]);
-								iSeconds=Integer.parseInt(args[7]);
+							if(args.length>6 && (args[5].equals("-p") || args[5].equals("-P"))) {
+                                fProb=Float.parseFloat(args[3]);
 							}
 						}
+                        else{
+                            fTimeProb=0;
+                            iSeconds=0;
+                            fProb=0;
+                        }
 					}
 					
-					csModule = new CommServer();
+					csModule = new CommServer(fProb/2, fTimeProb, iSeconds);
 					flag = new Flag();
 				} catch (SocketException e) {
 					System.err.println("NET ERROR: " + e.getMessage());

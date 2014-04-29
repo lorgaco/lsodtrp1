@@ -5,6 +5,8 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.io.*;
 
+import static java.lang.Thread.sleep;
+
 public class CommServer {
 	//private InetAddress ipHost;
 	private DatagramSocket dtSocket;
@@ -19,35 +21,13 @@ public class CommServer {
 	
 	private Random generator;
 
-	public CommServer() throws SocketException {
-		// socket creation
-		dtSocket = new DatagramSocket(Data.PORT);
-		ResponseList = new ArrayList<ArrayObject>();
-		iIdMessage = 0;
-		this.fProb = 0;
-		this.fTimeProb = 0;
-		this.iSeconds = 0;
-		generator = new Random(0);
-		
-	}
-	public CommServer(float fProb) throws SocketException {
-		// socket creation
-		dtSocket = new DatagramSocket(Data.PORT);
-		ResponseList = new ArrayList<ArrayObject>();
-		iIdMessage = 0;
-		this.fProb = fProb;
-		this.fTimeProb = 0;
-		this.iSeconds = 0;
-		generator = new Random(0);
-		
-	}
 	public CommServer(float fProb, float fTimeProb, int iSeconds) throws SocketException {
 		// socket creation
 		dtSocket = new DatagramSocket(Data.PORT);
 		ResponseList = new ArrayList<ArrayObject>();
 		iIdMessage = 0;
-		this.fProb = fProb;
-		this.fTimeProb = fTimeProb;
+		this.fProb = fProb/100;
+		this.fTimeProb = fTimeProb/100;
 		this.iSeconds = iSeconds;
 		generator = new Random(0);
 		
@@ -60,16 +40,26 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
-			do{
+			System.out.println("paso");
+            boolean entra = true;
+			//float aux_random = generator.nextFloat();
+			//System.out.println("rand " + aux_random);
+            while(generator.nextFloat() < fProb || entra){
+                if(!entra) System.out.println("tira");
+                entra = false;
 				dtSocket.receive(pkRequest);
-				if(generator.nextFloat()<fTimeProb){
+				//aux_random = generator.nextFloat();
+				//System.out.println("rand " + aux_random);
+				if(generator.nextFloat() < fTimeProb){
+                    System.out.println("sleep");
 					try {
-						wait(iSeconds*1000);
+						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
 				}
-			}while(generator.nextFloat()<(fProb/2));
+			}
+			System.out.println("sale");
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		
@@ -85,27 +75,34 @@ public class CommServer {
 			byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
 			dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
 			msRequest.setbyArguments(byArguments);
+
+			System.out.println("type = " + msRequest.getiTypeMessage());
 		
 			// search for duplicates
 			if(!ResponseList.isEmpty()){
+				System.out.println("search");
 				ListIterator<ArrayObject> it = ResponseList.listIterator();
 				int i = 0;
 				for(i = 0; i < ResponseList.size(); i++){
+					System.out.println("busca");
 					int index = it.nextIndex();
 					ArrayObject pkArray = it.next();
 					if(pkArray.Addr.equals(ClientAddr) && pkArray.Port.equals(ClientPort)){
 						if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
 							if(msRequest.getiTypeMessage()==Data.REQUEST){
 								// resend previous response
+								System.out.println("resend");
 								sendMessage(pkArray.Message);
 							}
 							else if(msRequest.getiTypeMessage()==Data.ACK){
 								// delete acknowled messages
+								System.out.println("delete by ack");
 								ResponseList.remove(index);
 							}
 						}
 						else if(pkArray.Message.getiIdMessage()<msRequest.getiIdMessage()){
 							// delete previous message if exists
+							System.out.println("delete by id> and return");
 							ResponseList.remove(index);
 							
 							// Update iIdMessage
@@ -116,13 +113,14 @@ public class CommServer {
 				}
 				if(i == ResponseList.size()-1){
 					// Update iIdMessage
-					System.out.println("return 1");
+					System.out.println("not in list and return");
 					iIdMessage = msRequest.getiIdMessage();
 					return Data.OK;
 				}
 			}
 			else{
 				// Update iIdMessage
+				System.out.println("empty list and return");
 				iIdMessage = msRequest.getiIdMessage();
 				return Data.OK;
 			}
@@ -141,7 +139,11 @@ public class CommServer {
 		pkArray.Message = msResponse;
 		ResponseList.add(pkArray);
 		
-		if(generator.nextFloat()<(fProb/2)){
+		float aux_random = generator.nextFloat();
+		System.out.println("Reply rand " + aux_random);
+		System.out.println("Reply fProb " + fProb);
+		if(aux_random>(fProb)){
+			System.out.println("send response");
 			return sendMessage(msResponse);
 		}
 		else return 0;

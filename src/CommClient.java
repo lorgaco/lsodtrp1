@@ -18,14 +18,14 @@ public class CommClient{
 		ipHost = InetAddress.getByName(ServerHostName);
 		// socket creation
 		dtSocket = new DatagramSocket();
-		dtSocket.setSoTimeout(Data.SOCKET_TIMEOUT);
 		//ClientPort = dtSocket.getLocalPort();
 		iIdMessage = 0;
 	}
 	
 	public int doOperation(Message msRequest, Message msResponse) {
 		msRequest.setiTypeMessage(Data.REQUEST);
-		msRequest.setiIdMessage(iIdMessage++);
+		iIdMessage++;
+		msRequest.setiIdMessage(iIdMessage);
 		
 		try {
 			ByteArrayOutputStream baOut = new ByteArrayOutputStream();
@@ -43,6 +43,7 @@ public class CommClient{
 			pkRequest = new DatagramPacket(baOut.toByteArray(),dtOut.size(), ipHost, Data.PORT);
 			
 			// send the packet
+			System.out.println("envia request");
 	    	dtSocket.send(pkRequest);
 			
 		} catch (IOException e) {
@@ -54,20 +55,39 @@ public class CommClient{
 			// Create the input buffer
 			byte [] InBuffer = new byte[Data.MAX_MESSAGE_SIZE] ;
 			DatagramPacket pkResponse = new DatagramPacket(InBuffer,InBuffer.length);
+            ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
+            DataInputStream dtIn = new DataInputStream(baIn);
 			
 			// Receive the packet
-			timer = new Timer();
-			timer.schedule(new Wait(dtSocket, pkRequest), 100, 100); //schedule the task to be run at 100 ms time
-			dtSocket.receive(pkResponse);
-			timer.cancel();
+			//timer = new Timer();
+			//timer.schedule(new Wait(dtSocket, pkRequest), Data.SOCKET_RTX_PERIOD, Data.SOCKET_RTX_PERIOD); //schedule the task to be run at SOCKET_RTX_PERIOD ms time
+			int maxPkts = (int) Math.floor((float) (Data.SOCKET_TIMEOUT-Data.SOCKET_RTX_PERIOD)/(float) Data.SOCKET_RTX_PERIOD);
+			int count = 0;
+            do {
+				try {
+					dtSocket.setSoTimeout(Data.SOCKET_RTX_PERIOD);
+	                dtSocket.receive(pkResponse);
+					System.out.println("receive");
+				} catch (SocketTimeoutException ste) {
+					System.out.println("envia request");
+					dtSocket.send(pkRequest);
+					count++;
+					System.out.println("maxPkts " + maxPkts);
+					System.out.println("count " + count);
+					if(count>=maxPkts) {
+						System.err.println("Can't reach server");
+						return Data.NET_ERROR;
+					}
+				}
+                // extract fields 1
+                msResponse.setiTypeMessage(dtIn.readInt());
+                msResponse.setiIdMethod(dtIn.readInt());
+                msResponse.setiIdMessage(dtIn.readInt());
+            }while(msResponse.getiIdMessage()!=iIdMessage);
+			//timer.cancel();
 			
-			ByteArrayInputStream baIn = new ByteArrayInputStream(InBuffer);
-			DataInputStream dtIn = new DataInputStream(baIn);
-			
-			// extract fields
-			msResponse.setiTypeMessage(dtIn.readInt());
-			msResponse.setiIdMethod(dtIn.readInt());
-			msResponse.setiIdMessage(dtIn.readInt());
+
+            // extract fields 2
 			msResponse.setiLengthArgs(dtIn.readInt());
 			byte[] byArguments = new byte[Data.MAX_ARGUMENTS_SIZE];
 			dtIn.read(byArguments, 0, msResponse.getiLengthArgs());
@@ -76,7 +96,7 @@ public class CommClient{
 			
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
-			timer.cancel();
+			//timer.cancel();
 			return Data.NET_ERROR;
 		}
 		
@@ -102,12 +122,14 @@ public class CommClient{
 						
 			// send the packet
 			dtSocket.send(pkRequest);
+			System.out.println("envia ack");
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());
 			timer.cancel();
 			return Data.NET_ERROR;
 		}
 		
+		System.out.println("sale");
 		return Data.OK;
 	}
 
@@ -131,8 +153,9 @@ class Wait extends TimerTask{
     public void run()
     {
     	try {
-    		if(count >= maxPkts) {
+    		if(count > maxPkts) {
     			System.err.println("Can't reach server");
+                this.cancel();
     		} else {
     			System.out.println("envia");
 				Socket.send(Packet);
