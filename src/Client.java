@@ -25,7 +25,6 @@ public class Client {
 				if(args.length>2) {
 					if(args[1].equals("-k") || args[1].equals("-K")) {
 						Key=args[2];
-                        System.out.println("Admin key: " + Key);
 					}
 				}
 			} catch (Exception e) {
@@ -45,9 +44,7 @@ public class Client {
 				else{
 					String method = Data.PromptToMethod(strComand[0].toString());
 					if(method.equals("NUEVO")){
-                        //System.out.println("Key = " + Key);
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
-						else if(strComand.length<3) System.err.println("Not enough arguments");
+						if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
 							String designation = strComand[1].toString();
 							for(int i = 2; i < strComand.length-1; i++) {
@@ -58,8 +55,7 @@ public class Client {
 						}
 					}
 					else if(method.equals("QUITA")){
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
-						else if(strComand.length<2) System.err.println("Not enough arguments");
+						if(strComand.length<2) System.err.println("Not enough arguments");
 						else{
 							short code = Short.parseShort(strComand[1].toString());
 							quita(code);
@@ -77,7 +73,6 @@ public class Client {
 						}
 					}
 					else if(method.equals("PLANTILLA")){
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
 							plantilla();
 					}
 					else if(method.equals("REPERTORIO")){
@@ -137,7 +132,6 @@ public class Client {
 		try {
 			dtParams.writeUTF(designation);
 			dtParams.writeInt(maximum);
-            dtParams.writeUTF(Key);
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
 			return Data.INTERNAL_ERROR;
@@ -186,7 +180,6 @@ public class Client {
 		DataOutputStream dtParams = new DataOutputStream(baParams);
 		try {
 			dtParams.writeShort(code);
-            dtParams.writeUTF(Key);
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
 			return Data.INTERNAL_ERROR;
@@ -282,12 +275,12 @@ public class Client {
 		//================Arguments Packaging================//
 		ByteArrayOutputStream baParams = new ByteArrayOutputStream();
 		DataOutputStream dtParams = new DataOutputStream(baParams);
-		try {
-			dtParams.writeUTF(Key);
-		} catch (IOException e) {
-			System.err.println("ERROR: " + e.getMessage());
-			return Data.INTERNAL_ERROR;
-		}
+		//try {
+			//dtParams.writeUTF(Key);
+		//} catch (IOException e) {
+			//System.err.println("ERROR: " + e.getMessage());
+			//return Data.INTERNAL_ERROR;
+		//}
 
 		//================Message Sending================//
 		Message msRequest = new Message();

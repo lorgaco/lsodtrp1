@@ -17,7 +17,6 @@ public class Dealer {
 				try {
 					if(args[0].equals("-k") || args[1].equals("-K")) {
 						Key=args[1];
-                        System.out.println("Admin key: " + Key);
 					}
 					else {
 						System.err.println("key not provided");
@@ -78,11 +77,11 @@ public class Dealer {
 		int method = msRequest.getiIdMethod();
 		switch(method) {
 			case 1:
-				result = flag.nuevo(msRequest, Key);
+				result = flag.nuevo(msRequest);
 				System.out.println(result);
 				break;
 			case 2:
-				result = flag.quita(msRequest, Key);
+				result = flag.quita(msRequest);
 				System.out.println(result);
 				break;
 			case 3:
@@ -90,7 +89,7 @@ public class Dealer {
 				System.out.println(result);
 				break;
 			case 4:
-				result = flag.plantilla(msRequest, Key);
+				result = flag.plantilla(msRequest);
 				System.out.println(result);
 				break;
 			case 5:
