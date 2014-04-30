@@ -1,0 +1,53 @@
+A
+B
+M
+NUEVA
+NUEVA juego 35
+NUEVOO 0 temperatura 0 100
+NUEVO juego
+NUEVO juego 100 no_numero
+NUEVO juego no_numero
+NUEVO 0 esto tiene mas de 30 caracteres 100
+NUEVO 0 juego -100
+QUITO
+QUITAO 4
+QUITA -4
+QUITA
+QUITA 1 sobra
+QUITA no_numero
+INSCRIVE Juan Pérez apodo
+INSCRIBEO Juan Pérez apodo
+INSCRIBE
+INSCRIBE apodo
+INSCRIBE Este Nombre Tiene Más de Cuarenta y Ocho Caracteresapodo
+INSCRIBE Juan Pérez apodomuylargo
+PLANTIYA
+PLANTILLAS
+PLANTILLA sobra
+REPERTORIA 7
+REPERTORIOS 7
+REPERTORIO
+REPERTORIO no_numero
+REPERTORIO -2
+REPERTORIO 7 sobra
+JUEGO jugador1 0
+JUEGAS jugador1 0
+JUEGA 0
+JUEGA jugador1 no_numero
+JUEGA 0 jugador1
+JUEGA Este Codigo Tiene Caracteres Blancos 0
+JUEGA jugador1 0 sobra
+TERMINO jugador1 0
+TERMINAS jugador1 0
+TERMINA 0
+TERMINA jugador1 no_numero
+TERMINA 0 jugador1
+TERMINA Este Codigo Tiene Caracteres Blancos 0
+TERMINA jugador1 0 sobra
+LISTO 4
+LISTAR 4
+LISTA
+LISTA -4
+LISTA no_numero
+LISTA 4 sobra
+FINAL

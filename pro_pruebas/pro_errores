@@ -1,0 +1,21 @@
+NUEVO Juego 2
+NUEVO OtroJuego 50
+INSCRIBE Juan Pérez jugador1
+INSCRIBE Paco Gómez jugador2
+PLANTILLA
+QUITA 8
+NUEVO Juego 100
+INSCRIBE Juan Pérez jugador3
+INSCRIBE Luis López jugador1
+REPERTORIO 125
+JUEGA jugador4 0
+JUEGA jugador1 8
+JUEGA jugador1 0
+JUEGA jugador1 0
+JUEGA jugador2 0
+TERMINA jugador4 0
+TERMINA jugador1 8
+TERMINA jugador1 1
+LISTA 1
+LISTA 8
+FINAL
