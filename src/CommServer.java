@@ -40,26 +40,53 @@ public class CommServer {
 		DatagramPacket pkRequest = new DatagramPacket(InBuffer,	InBuffer.length);
 		
 		while(true){
-			System.out.println("paso");
-            boolean entra = true;
-			//float aux_random = generator.nextFloat();
-			//System.out.println("rand " + aux_random);
-            while(generator.nextFloat() < fProb || entra){
-                if(!entra) System.out.println("tira");
+            boolean received = false;
+
+
+            while(!received) {
+                float aux_random = generator.nextFloat();
+//                System.out.println("rand tirar = " + aux_random + "; fProb = " + fProb);  // PRINT
+                if(aux_random < fProb) {
+                    System.out.println("    CommServer -> Package thrown => lost");  // PRINT
+                    dtSocket.receive(pkRequest);
+                }
+                float aux_random2 = generator.nextFloat();
+//                System.out.println("rand sleep = " + aux_random2 + "; fProb = " + fTimeProb);  // PRINT
+                if(aux_random2 < fTimeProb) {
+                    System.out.println("    CommServer -> Package delayed");  // PRINT
+                    dtSocket.receive(pkRequest);
+                    received = true;
+                    try {
+                        sleep(iSeconds * 1000);
+                    } catch (Exception e) {
+                        System.err.println("Queue Simulator: " + e.getMessage());
+                    }
+                }
+                if(aux_random > fProb || aux_random2 > fTimeProb) {
+                    dtSocket.receive(pkRequest);
+                    received = true;
+                }
+            }
+/*
+            while(aux_random < fProb || entra){
+                if(!entra) System.out.println("tira");  // PRINT
                 entra = false;
 				dtSocket.receive(pkRequest);
-				//aux_random = generator.nextFloat();
-				//System.out.println("rand " + aux_random);
-				if(generator.nextFloat() < fTimeProb){
-                    System.out.println("sleep");
+				aux_random = generator.nextFloat();
+				System.out.println("rand sleep = " + aux_random + "; fProb = " + fTimeProb);  // PRINT
+				if(aux_random < fTimeProb){
+                    System.out.println("sleep");  // PRINT
 					try {
 						sleep(iSeconds * 1000);
 					} catch (InterruptedException e) {
 						System.err.println("Queue Simulator: " + e.getMessage());
 					}
 				}
+                aux_random = generator.nextFloat();
+                System.out.println("rand tirar = " + aux_random + "; fProb = " + fProb);  // PRINT
 			}
-			System.out.println("sale");
+*/
+            System.out.println("    CommServer -> Package received");  // PRINT
 		
 			ClientAddr = pkRequest.getAddress();
 			ClientPort = pkRequest.getPort();		
@@ -76,33 +103,35 @@ public class CommServer {
 			dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
 			msRequest.setbyArguments(byArguments);
 
-			System.out.println("type = " + msRequest.getiTypeMessage());
+			System.out.println("    CommServer -> Message request type = " + msRequest.getiTypeMessage());  // PRINT
 		
 			// search for duplicates
 			if(!ResponseList.isEmpty()){
-				System.out.println("search");
+//				System.out.println("search");  // PRINT
 				ListIterator<ArrayObject> it = ResponseList.listIterator();
 				int i = 0;
 				for(i = 0; i < ResponseList.size(); i++){
-					System.out.println("busca");
+//					System.out.println("busca");  // PRINT
 					int index = it.nextIndex();
 					ArrayObject pkArray = it.next();
 					if(pkArray.Addr.equals(ClientAddr) && pkArray.Port.equals(ClientPort)){
 						if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
 							if(msRequest.getiTypeMessage()==Data.REQUEST){
 								// resend previous response
-								System.out.println("resend");
+//								System.out.println("Resend, IdMessage = " + pkArray.Message.getiIdMessage());  // PRINT
+//                                System.out.println("Resend, IdMethod = " + pkArray.Message.getiIdMethod());  // PRINT
+//                                System.out.println("Resend, TypeMessage = " + pkArray.Message.getiTypeMessage());  // PRINT
 								sendMessage(pkArray.Message);
 							}
 							else if(msRequest.getiTypeMessage()==Data.ACK){
 								// delete acknowled messages
-								System.out.println("delete by ack");
+								System.out.println("    CommServer -> Search -> Delete by ACK");  // PRINT
 								ResponseList.remove(index);
 							}
 						}
 						else if(pkArray.Message.getiIdMessage()<msRequest.getiIdMessage()){
 							// delete previous message if exists
-							System.out.println("delete by id> and return");
+							System.out.println("    CommServer -> Search -> Delete by higher id and return");  // PRINT
 							ResponseList.remove(index);
 							
 							// Update iIdMessage
@@ -113,14 +142,14 @@ public class CommServer {
 				}
 				if(i == ResponseList.size()-1){
 					// Update iIdMessage
-					System.out.println("not in list and return");
+					System.out.println("    CommServer -> Search -> Not found in the list and return");  // PRINT
 					iIdMessage = msRequest.getiIdMessage();
 					return Data.OK;
 				}
 			}
 			else{
 				// Update iIdMessage
-				System.out.println("empty list and return");
+				System.out.println("    CommServer -> Search -> Empty list and return");  // PRINT
 				iIdMessage = msRequest.getiIdMessage();
 				return Data.OK;
 			}
@@ -140,10 +169,9 @@ public class CommServer {
 		ResponseList.add(pkArray);
 		
 		float aux_random = generator.nextFloat();
-		System.out.println("Reply rand " + aux_random);
-		System.out.println("Reply fProb " + fProb);
+//		System.out.println("Reply rand " + aux_random + "; fProb " + fProb);  // PRINT
 		if(aux_random>(fProb)){
-			System.out.println("send response");
+			System.out.println("    CommServer -> Send response");  // PRINT
 			return sendMessage(msResponse);
 		}
 		else return 0;
@@ -169,6 +197,11 @@ public class CommServer {
 			
 			// send the packet
 			dtSocket.send(pkResponse);
+
+            // extract fields todo delete this, just for debugging
+//            System.out.println("IdMessage Sent = " + msResponse.getiIdMessage());  // PRINT
+//            System.out.println("IdMethod Sent = " + msResponse.getiIdMethod());  // PRINT
+//            System.out.println("TypeMessage Sent = " + msResponse.getiTypeMessage());  // PRINT
 			
 		} catch (IOException e) {
 			System.err.println("I/O: " + e.getMessage());

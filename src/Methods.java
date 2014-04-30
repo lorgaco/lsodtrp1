@@ -27,7 +27,7 @@ public class Methods {
 	
 	public Answer quita(short code) {
 		Answer answer = new Answer();
-		System.out.print("SIZE = " + juegos.size() + " CODE = " + code);
+		System.out.print("SIZE = " + juegos.size() + " CODE = " + code);  // PRINT
 		int ii = 0;
 		for (ii=0; ii<juegos.size(); ii++) {
 			if(juegos.get(ii).startsWith(Integer.toString(code))){
@@ -44,10 +44,10 @@ public class Methods {
 	
 	public Answer inscribe(String name, String alias) {
 		Answer answer = new Answer();
-		printhelp(jugadores);
+		printhelp(jugadores);  // PRINT
 		if (!buscar2(name, jugadores) && !buscar2(alias, jugadores)) {
 			String contenido = name + " : " + alias;
-			System.out.println(contenido);
+			System.out.println(contenido);  // PRINT
 			escribir2(contenido, jugadores);
 			answer.setAnswer(null);
 			answer.setError(Data.OK);
@@ -65,7 +65,7 @@ public class Methods {
 		plantilla = leer2(jugadores);
 		Collections.sort(plantilla);
 		String plantilla_final = plantilla.toString();
-		System.out.println(plantilla_final);
+		System.out.println(plantilla_final);  // PRINT
 		answer.setAnswer(plantilla_final);
 		answer.setError(Data.OK);
 		return answer;
@@ -75,7 +75,7 @@ public class Methods {
 		Answer answer = new Answer();
 		ArrayList<String> repertorio = new ArrayList<String>();
 		repertorio = leer2(juegos);
-		System.out.println(repertorio);
+		System.out.println(repertorio);  // PRINT
 		int min = minimum;
 		ArrayList<String> repertorio2 = new ArrayList<String>();
 		for(String temp : repertorio) {
@@ -86,8 +86,8 @@ public class Methods {
 				//repertorio.remove(temp);
 			}
 		}
-		System.out.println("RESULTADO REPERTORIO");
-		System.out.println(repertorio2.toString());
+		System.out.println("RESULTADO REPERTORIO");  // PRINT
+		System.out.println(repertorio2.toString());  // PRINT
 		answer.setAnswer(repertorio2.toString());
 		answer.setError(Data.OK);
 		return answer;
@@ -97,11 +97,11 @@ public class Methods {
 		Answer answer = new Answer();
 		String contenido = Integer.toString(code) + " : " + alias;
 
-		//System.out.println("ALIAS = " + alias);
-		//System.out.println("CODE = " + Integer.toString(code));
+		//System.out.println("ALIAS = " + alias);  // PRINT
+		//System.out.println("CODE = " + Integer.toString(code));  // PRINT
 		
-		if(buscar2(alias, jugadores)) System.out.println("TRUE JUGADORES");
-		if(buscar2(Integer.toString(code) + " <- ", juegos)) System.out.println("TRUE JUEGOS");
+		if(buscar2(alias, jugadores)) System.out.println("TRUE JUGADORES");  // PRINT
+		if(buscar2(Integer.toString(code) + " <- ", juegos)) System.out.println("TRUE JUEGOS");  // PRINT
 		
 		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
 			//System.out.println("ENTRA 1");
@@ -115,8 +115,8 @@ public class Methods {
 				List<String> lista_final = new ArrayList<String>();
 				lista_final = subLista(lista, code);
 				
-				printhelp(lista_final);
-				System.out.println(" ");
+				printhelp(lista_final);  // PRINT
+				System.out.println(" ");  // PRINT
 				
 				ArrayList<String> aux = new ArrayList<String>();
 				aux = leer2(juegos);
@@ -128,11 +128,12 @@ public class Methods {
 					}
 				}
 				int max = Integer.parseInt(aux2);
-				System.out.println("MAX = " + Integer.toString(max) + " ---> LISTA_SIZE = " + Integer.toString(lista_final.size()));
+				System.out.println("MAX = " + Integer.toString(max) + " ---> LISTA_SIZE = " +
+                        Integer.toString(lista_final.size()));  // PRINT
 				if(lista_final.size() < max) {
-					//System.out.println("ENTRA 3");
+					//System.out.println("ENTRA 3");  // PRINT
 					escribir2(contenido, playing);
-					printhelp(playing);
+					printhelp(playing);  // PRINT
 					answer.setAnswer(null);
 					answer.setError(Data.OK);
 					return answer;
@@ -165,7 +166,7 @@ public class Methods {
 		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
 			if(buscar2(contenido, playing)) {
 				playing.remove(playing.indexOf(contenido));
-				printhelp(playing);
+				printhelp(playing);  // PRINT
 				answer.setAnswer(null);
 				answer.setError(Data.OK);
 				return answer;
@@ -188,18 +189,18 @@ public class Methods {
 		lista = leer2(playing);
         lista2 = leer2(juegos);
 		Collections.sort(lista);
-		printhelp(lista);
+		printhelp(lista);  // PRINT
 		if(buscar2(Integer.toString(code) + " <- ", lista2)) {
 			List<String> lista_final = new ArrayList<String>();
-            System.out.println("LISTA SIZE: " + lista.size());
-            //System.out.println(lista.size());
+            System.out.println("LISTA SIZE: " + lista.size());  // PRINT
+            //System.out.println(lista.size());  // PRINT
 			lista_final = subLista(lista, code);
 			
 			String lista_final2 = lista_final.toString();
-			System.out.println(" ");
-			System.out.println(" === LISTA === ");
-			printhelp(lista_final);
-			System.out.println(" ");
+			System.out.println(" ");  // PRINT
+			System.out.println(" === LISTA === ");  // PRINT
+			printhelp(lista_final);  // PRINT
+			System.out.println(" ");  // PRINT
 			answer.setAnswer(lista_final2);
 			answer.setError(Data.OK);
 			return answer;
@@ -237,7 +238,7 @@ public class Methods {
 		try {
 			for (ii=0; ii<fich.size(); ii++) {
 				if(fich.get(ii).contains(contenido)) {
-                    System.out.println("BUSCAR found: --> " + contenido + " <-- in: --> " + fich.get(ii));
+                    System.out.println("BUSCAR found: --> " + contenido + " <-- in: --> " + fich.get(ii));  // PRINT
                     return true;
                 }
 			}
@@ -292,8 +293,8 @@ public class Methods {
 		if(last==0 && first!=0) last=lista.size();
 		// end to do (pero funciona)
 
-		System.out.println(" ");
-		System.out.println("FIRST = " + Integer.toString(first) + " >> LAST = " + Integer.toString(last));
+		System.out.println(" ");  // PRINT
+		System.out.println("FIRST = " + Integer.toString(first) + " >> LAST = " + Integer.toString(last));  // PRINT
 		
 		result = lista.subList(first, last);
 		

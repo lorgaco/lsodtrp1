@@ -17,7 +17,7 @@ public class Dealer {
 				try {
 					if(args[0].equals("-k") || args[1].equals("-K")) {
 						Key=args[1];
-                        System.out.println("Admin key: " + Key);
+                        System.out.println("Admin key: " + Key);  // PRINT
 					}
 					else {
 						System.err.println("key not provided");
@@ -43,7 +43,8 @@ public class Dealer {
                             fProb=0;
                         }
 					}
-					
+					System.out.println("Starting CommServer: fProb = " + fProb + "; fTimeProb = " + fTimeProb +
+                            "; iSeconds = " + iSeconds);  // PRINT
 					csModule = new CommServer(fProb/2, fTimeProb, iSeconds);
 					flag = new Flag();
 				} catch (SocketException e) {
@@ -79,35 +80,35 @@ public class Dealer {
 		switch(method) {
 			case 1:
 				result = flag.nuevo(msRequest, Key);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 2:
 				result = flag.quita(msRequest, Key);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 3:
 				result = flag.inscribe(msRequest);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 4:
 				result = flag.plantilla(msRequest, Key);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 5:
 				result = flag.repertorio(msRequest);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 6:
 				result = flag.juega(msRequest);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 7:
 				result = flag.termina(msRequest);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 			case 8:
 				result = flag.lista(msRequest);
-				System.out.println(result);
+//				System.out.println(result);  // PRINT
 				break;
 		}
 		return result.toByteStruct();

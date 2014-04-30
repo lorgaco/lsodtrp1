@@ -25,16 +25,16 @@ public class Client {
 				if(args.length>2) {
 					if(args[1].equals("-k") || args[1].equals("-K")) {
 						Key=args[2];
-                        System.out.println("Admin key: " + Key);
+                        System.out.println("Admin key: " + Key);  // PRINT
 					}
 					else {
 						Key = "0";
-						System.out.println("No admin key");
+						System.out.println("No admin key");  // PRINT
 					}
 				}
 				else {
 					Key = "0";
-					System.out.println("No admin key");
+					System.out.println("No admin key");  // PRINT
 				}
 			} catch (Exception e) {
 				System.err.println("NET ERROR: " + e.getMessage());
