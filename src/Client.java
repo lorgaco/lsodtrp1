@@ -28,12 +28,12 @@ public class Client {
                         System.out.println("Admin key: " + Key);  // PRINT
 					}
 					else {
-						Key = "0";
+						Key = null;
 						System.out.println("No admin key");  // PRINT
 					}
 				}
 				else {
-					Key = "0";
+					Key = null;
 					System.out.println("No admin key");  // PRINT
 				}
 			} catch (Exception e) {
@@ -54,7 +54,7 @@ public class Client {
 					String method = Data.PromptToMethod(strComand[0].toString());
 					if(method.equals("NUEVO")){
                         //System.out.println("Key = " + Key);
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
+                        if(Key == null) System.out.println("No Key provided. This operation can only be done by Admin");
 						else if(strComand.length<3) System.err.println("Not enough arguments");
 						else{
 							String designation = strComand[1].toString();
@@ -73,7 +73,7 @@ public class Client {
 						}
 					}
 					else if(method.equals("QUITA")){
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
+                        if(Key == null) System.out.println("No Key provided. This operation can only be done by Admin");
 						else if(strComand.length<2) System.err.println("Not enough arguments");
 						else{
 							try {
@@ -102,8 +102,9 @@ public class Client {
 						}
 					}
 					else if(method.equals("PLANTILLA")){
-                        if(Key == null) System.out.println("This operation can only be done by Admin");
-							plantilla();
+                        if(Key == null) System.out.println("No Key provided. This operation can only be done by Admin");
+                        else
+						    plantilla();
 					}
 					else if(method.equals("REPERTORIO")){
 						if(strComand.length<2) System.err.println("Not enough arguments");
