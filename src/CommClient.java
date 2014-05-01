@@ -20,6 +20,7 @@ public class CommClient{
 	}
 	
 	public int doOperation(Message msRequest, Message msResponse) {
+        System.out.println(" ");  // PRINT
         System.out.println("===== CommClient =====");  // PRINT
 		msRequest.setiTypeMessage(Data.REQUEST);
 		iIdMessage++;
@@ -42,6 +43,7 @@ public class CommClient{
 			
 			// send the packet
 			System.out.println("    CommClient -> Send request");  // PRINT
+//            System.out.println("        idMessage -> " + msRequest.getiIdMessage());  // PRINT
 	    	dtSocket.send(pkRequest);
 			
 		} catch (IOException e) {
@@ -70,6 +72,7 @@ public class CommClient{
 					System.out.println("    CommClient -> Package received");  // PRINT
 				} catch (SocketTimeoutException ste) {
 					System.out.println("    CommClient -> Resend request");  // PRINT
+//                    System.out.println("        idMessage -> " + msRequest.getiIdMessage());  // PRINT
 					dtSocket.send(pkRequest);
 					count++;
 //					System.out.println("maxPkts " + maxPkts + "; count " + count);  // PRINT
@@ -132,6 +135,7 @@ public class CommClient{
 		
 //		System.out.println("sale");  // PRINT
         System.out.println("=== End CommClient ===");  // PRINT
+        System.out.println(" ");  // PRINT
 		return Data.OK;
 	}
 

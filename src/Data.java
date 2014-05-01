@@ -4,7 +4,7 @@ public class Data {
 	public static final int PORT = 4005;
 	public static final int MAX_ARGUMENTS_SIZE = 8000;
 	public static final int MAX_MESSAGE_SIZE = MAX_ARGUMENTS_SIZE + 16; // 4 ints
-	public static final int SOCKET_TIMEOUT = 10000; // in milliseconds
+	public static final int SOCKET_TIMEOUT = 50000; // in milliseconds
 	public static final int SOCKET_RTX_PERIOD = 2000; // in milliseconds
 	
 	// Local response codes

@@ -43,6 +43,7 @@ public class Client {
 		
 		BufferedReader brComand = new BufferedReader(new InputStreamReader(System.in));
 		while(true){
+            System.out.println(" ");  // PRINT
 			System.out.println("Escriba comando");
 			try {
 				String strComand[] = brComand.readLine().split(" ");
@@ -61,7 +62,7 @@ public class Client {
 							for(int i = 2; i < strComand.length-1; i++) {
 								designation = designation + " " + strComand[i].toString();
 							}
-							if(designation.length() > 30) System.err.println("FORMAR ERROR > 30 characters");
+							if(designation.length() > 30) System.err.println("FORMAT ERROR > 30 characters");
 							else {
 								try {
 									int maximum = Integer.parseInt(strComand[strComand.length-1]);

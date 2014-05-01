@@ -103,13 +103,15 @@ public class CommServer {
 			dtIn.read(byArguments, 0, msRequest.getiLengthArgs());
 			msRequest.setbyArguments(byArguments);
 
-			System.out.println("    CommServer -> Message request type = " + msRequest.getiTypeMessage());  // PRINT
+//			System.out.println("    CommServer -> Message request type = " + msRequest.getiTypeMessage());  // PRINT
+//            System.out.println("        idMessage -> " + msRequest.getiIdMessage());  // PRINT
 		
 			// search for duplicates
 			if(!ResponseList.isEmpty()){
 //				System.out.println("search");  // PRINT
 				ListIterator<ArrayObject> it = ResponseList.listIterator();
 				int i = 0;
+                boolean bAux = false;
 				for(i = 0; i < ResponseList.size(); i++){
 //					System.out.println("busca");  // PRINT
 					int index = it.nextIndex();
@@ -118,36 +120,45 @@ public class CommServer {
 						if(pkArray.Message.getiIdMessage()==msRequest.getiIdMessage()){
 							if(msRequest.getiTypeMessage()==Data.REQUEST){
 								// resend previous response
-//								System.out.println("Resend, IdMessage = " + pkArray.Message.getiIdMessage());  // PRINT
+								System.out.println("        Resend, IdMessage = " + pkArray.Message.getiIdMessage());  // PRINT
 //                                System.out.println("Resend, IdMethod = " + pkArray.Message.getiIdMethod());  // PRINT
 //                                System.out.println("Resend, TypeMessage = " + pkArray.Message.getiTypeMessage());  // PRINT
 								sendMessage(pkArray.Message);
-							}
-							else if(msRequest.getiTypeMessage()==Data.ACK){
+                                bAux = true;
+							} else if(msRequest.getiTypeMessage()==Data.ACK){
 								// delete acknowled messages
 								System.out.println("    CommServer -> Search -> Delete by ACK");  // PRINT
 								ResponseList.remove(index);
-							}
-						}
-						else if(pkArray.Message.getiIdMessage()<msRequest.getiIdMessage()){
+                                bAux = true;
+							} else {
+//                                System.out.println("                                      UNEXPECTED 1");  // PRINT
+                            }
+						} else if(pkArray.Message.getiIdMessage() < msRequest.getiIdMessage()){
 							// delete previous message if exists
 							System.out.println("    CommServer -> Search -> Delete by higher id and return");  // PRINT
 							ResponseList.remove(index);
-							
+//                            bAux = true;
+
 							// Update iIdMessage
 							iIdMessage = msRequest.getiIdMessage();
 							return Data.OK;
-						}
-					}
+						} else {
+//                            System.out.println("                                      UNEXPECTED 2");  // PRINT
+                        }
+					} else {
+//                        System.out.println("                                      UNEXPECTED 3");  // PRINT
+                    }
 				}
-				if(i == ResponseList.size()-1){
+				//if(i == ResponseList.size()-1){
+                if(!bAux) {
 					// Update iIdMessage
 					System.out.println("    CommServer -> Search -> Not found in the list and return");  // PRINT
 					iIdMessage = msRequest.getiIdMessage();
 					return Data.OK;
-				}
-			}
-			else{
+				} else {
+//                    System.out.println("                                      UNEXPECTED 4");  // PRINT
+                }
+			} else{
 				// Update iIdMessage
 				System.out.println("    CommServer -> Search -> Empty list and return");  // PRINT
 				iIdMessage = msRequest.getiIdMessage();
@@ -170,15 +181,18 @@ public class CommServer {
 		
 		float aux_random = generator.nextFloat();
 //		System.out.println("Reply rand " + aux_random + "; fProb " + fProb);  // PRINT
-		if(aux_random>(fProb)){
-			System.out.println("    CommServer -> Send response");  // PRINT
-			return sendMessage(msResponse);
-		}
-		else return 0;
+//		if(aux_random>(fProb)){
+		System.out.println("    CommServer -> Send response");  // PRINT
+		return sendMessage(msResponse);
+//		}
+//		else return 0;
 	}
 	
 	public int sendMessage(Message msResponse){
-		
+        float aux_random = generator.nextFloat();
+        if(aux_random<(fProb)){
+            return Data.OK;
+        }
 		try {
 			ByteArrayOutputStream baOut = new ByteArrayOutputStream();
 			DataOutputStream dtOut = new DataOutputStream(baOut);
