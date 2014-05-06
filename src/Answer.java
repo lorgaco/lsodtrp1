@@ -1,6 +1,4 @@
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 
 public class Answer {
@@ -51,13 +49,19 @@ public class Answer {
 		byte[] byParams = baParams.toByteArray();
 		return byParams;
 	}
-	
-	public Answer(int error, int server_error, byte [] answer) {
-		super();
-		this.error = error;
-		this.server_error = server_error;
-		this.answer = answer;
-	}
+
+    public Answer(byte [] byCreation){
+        ByteArrayInputStream baCreation = new ByteArrayInputStream(byCreation);
+        DataInputStream dtCreation = new DataInputStream(baCreation);
+        try {
+            this.error = dtCreation.readInt();
+            this.server_error = dtCreation.readInt();
+            this.lengthAnswer = dtCreation.readInt();
+            dtCreation.read(this.answer, 0, this.lengthAnswer);
+        } catch (IOException e) {
+            System.err.println("ERROR: " + e.getMessage());
+        }
+    }
 	
 	public Answer() {
 		super();

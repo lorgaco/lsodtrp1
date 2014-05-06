@@ -33,11 +33,6 @@ public class Data {
 	public static final int JUEGA = 6;
 	public static final int TERMINA = 7;
 	public static final int LISTA = 8;
-	
-	// File paths
-	public static final String PATH_JUEGOS = "/bd/juegos.txt";
-	public static final String PATH_JUGADORES = "/bd";
-	public static final String PATH_PLAYING = "";
 
 	public static String ErrorToString(int error){
 		switch(error) {
