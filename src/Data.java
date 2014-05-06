@@ -8,31 +8,31 @@ public class Data {
 	public static final int SOCKET_RTX_PERIOD = 2000; // in milliseconds
 	
 	// Local response codes
-	public static final int OK =0;
-	public static final int UNKNOWN_HOST = 1;
-	public static final int INTERNAL_ERROR = 2;
-	public static final int SERVER_ERROR = 3;
-	public static final int NET_ERROR = 4;
+	public static final short OK =0;
+	public static final short UNKNOWN_HOST = 1;
+	public static final short INTERNAL_ERROR = 2;
+	public static final short SERVER_ERROR = 3;
+	public static final short NET_ERROR = 4;
 	// Remote response errors
-	public static final int ALREADY_EXISTS = -1;
-	public static final int DOESNT_EXIST = -2;
-	public static final int MAX_ACHIEVED = -3;
-    public static final int AUTENTICATION_FAILED = -4;
+	public static final short ALREADY_EXISTS = -1;
+	public static final short DOESNT_EXIST = -2;
+	public static final short MAX_ACHIEVED = -3;
+    public static final short AUTENTICATION_FAILED = -4;
 	
 	// Message types
-	public static final int REQUEST = 0;
-	public static final int RESPONSE = 1;
-	public static final int ACK = 2;
+	public static final short REQUEST = 0;
+	public static final short RESPONSE = 1;
+	public static final short ACK = 2;
 	
 	// Methods
-	public static final int NUEVO = 1;
-	public static final int QUITA = 2;
-	public static final int INSCRIBE = 3;
-	public static final int PLANTILLA = 4;
-	public static final int REPERTORIO = 5;
-	public static final int JUEGA = 6;
-	public static final int TERMINA = 7;
-	public static final int LISTA = 8;
+	public static final short NUEVO = 1;
+	public static final short QUITA = 2;
+	public static final short INSCRIBE = 3;
+	public static final short PLANTILLA = 4;
+	public static final short REPERTORIO = 5;
+	public static final short JUEGA = 6;
+	public static final short TERMINA = 7;
+	public static final short LISTA = 8;
 	
 	// File paths
 	public static final String PATH_JUEGOS = "/bd/juegos.txt";

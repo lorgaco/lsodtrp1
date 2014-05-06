@@ -1,66 +1,55 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 
 public class Methods {
 	short codigo = 0;
-	List<String> juegos = new ArrayList<String>();
-	List<String> jugadores = new ArrayList<String>();
-	List<String> playing = new ArrayList<String>();
+	List<Juego> juegos = new ArrayList<Juego>();
+	List<Jugador> jugadores = new ArrayList<Jugador>();
 	
-	public Answer nuevo(String designation, int maximum) {
-		Answer answer = new Answer();
-		if (buscar2(designation, juegos) == false) {
-			String contenido = Integer.toString(codigo) + " <- " + designation + " -> " + Integer.toString(maximum);
+	public short nuevo(String designation, byte maximum) {
+		if (buscarNombre(designation) == false) {
 			codigo++;
-			escribir2(contenido, juegos);
-			answer.setAnswer(Integer.toString(codigo-1));
-			answer.setError(Data.OK);
-			return answer;
+            Juego game = new Juego();
+            game.designation = designation;
+            game.code = codigo;
+            game.maximum = maximum;
+            game.Jugando = new ArrayList<Jugador>();
+            juegos.add(game);
+            return codigo;
 		} else {
-			answer.setAnswer(null);
-			answer.setError(Data.ALREADY_EXISTS);
-			return answer;
+            return Data.ALREADY_EXISTS;
 		}
 	}
 	
-	public Answer quita(short code) {
-		Answer answer = new Answer();
-		System.out.print("SIZE = " + juegos.size() + " CODE = " + code);  // PRINT
-		int ii = 0;
-		for (ii=0; ii<juegos.size(); ii++) {
-			if(juegos.get(ii).startsWith(Integer.toString(code))){
-				juegos.remove(ii);
-				answer.setAnswer(null);
-				answer.setError(Data.OK);
-				return answer;
-			}
-		}
-		answer.setAnswer(null);
-		answer.setError(Data.DOESNT_EXIST);
-		return answer;
+	public short quita(short code) {
+        int index = 0;
+        if (buscarCodigo(code, index)) {
+            juegos.remove(index);
+            return Data.OK;
+        } else {
+            return Data.ALREADY_EXISTS;
+        }
 	}
 	
-	public Answer inscribe(String name, String alias) {
-		Answer answer = new Answer();
-		printhelp(jugadores);  // PRINT
-		if (!buscar2(name, jugadores) && !buscar2(alias, jugadores)) {
-			String contenido = name + " : " + alias;
-//			System.out.println(contenido);  // PRINT
-			escribir2(contenido, jugadores);
-			answer.setAnswer(null);
-			answer.setError(Data.OK);
-			return answer;
+	public short inscribe(String name, String alias) {
+		//printhelp(jugadores);  // PRINT
+        int index=0;
+        Jugador player = new Jugador();
+        player.alias = alias;
+        player.name = name;
+		if (!buscarJugador(player.alias, index)) {
+			jugadores.add(player);
+			return Data.OK;
 		} else {
-			answer.setAnswer(null);
-			answer.setError(Data.ALREADY_EXISTS);
-			return answer;
+			return Data.ALREADY_EXISTS;
 		}
 	}
 	
-	public Answer plantilla() {
-		Answer answer = new Answer();
+	public List<Jugador> plantilla() {
+		/*Answer answer = new Answer();
 		ArrayList<String> plantilla = new ArrayList<String>();
 		plantilla = leer2(jugadores);
 		Collections.sort(plantilla);
@@ -68,11 +57,12 @@ public class Methods {
 //		System.out.println(plantilla_final);  // PRINT
 		answer.setAnswer(plantilla_final);
 		answer.setError(Data.OK);
-		return answer;
+		return answer;*/
+        return jugadores;
 	}
 	
-	public Answer repertorio(byte minimum) {
-		Answer answer = new Answer();
+	public List<Juego> repertorio(byte minimum) {
+		/*Answer answer = new Answer();
 		ArrayList<String> repertorio = new ArrayList<String>();
 		repertorio = leer2(juegos);
 //		System.out.println(repertorio);  // PRINT
@@ -90,11 +80,20 @@ public class Methods {
 //		System.out.println(repertorio2.toString());  // PRINT
 		answer.setAnswer(repertorio2.toString());
 		answer.setError(Data.OK);
-		return answer;
+		return answer;*/
+        List<Juego> repert = new ArrayList<Juego>();
+        ListIterator<Juego> it = juegos.listIterator();
+        for (int ii=0; ii<juegos.size(); ii++) {
+            Juego game = it.next();
+            if(game.maximum>minimum) {
+                repert.add(game);
+            }
+        }
+        return repert;
 	}
 	
-	public Answer juega(String alias, short code) {
-		Answer answer = new Answer();
+	public Short juega(String alias, short code) {
+		/*Answer answer = new Answer();
 		String contenido = Integer.toString(code) + " : " + alias;
 
 		//System.out.println("ALIAS = " + alias);  // PRINT
@@ -157,7 +156,21 @@ public class Methods {
 			//return Data.DOESNT_EXIST;
 		}
 		
-		//return 0;
+		//return 0;*/
+        int index = 0;
+        if (buscarJugador(alias, index)) {
+            Jugador player = jugadores.get(index);
+            if (buscarCodigo(code, index)) {
+                if (buscarJugando(alias,index)){
+                    juegos.get(index).Jugando.add(player);
+                }
+                return Data.OK;
+            } else {
+                return Data.DOESNT_EXIST;
+            }
+        } else {
+            return Data.DOESNT_EXIST;
+        }
 	}
 	
 	public Answer termina(String alias, short code) {
@@ -232,22 +245,68 @@ public class Methods {
 		return result;	
 	}
 	
-	private Boolean buscar2(String contenido, List<String> fich) {
+	private Boolean buscarNombre(String contenido) {
 		Boolean result = false;
-		int ii = 0;
 		try {
-			for (ii=0; ii<fich.size(); ii++) {
-				if(fich.get(ii).contains(contenido)) {
-//                    System.out.println("BUSCAR found: --> " + contenido + " <-- in: --> " + fich.get(ii));  // PRINT
+            ListIterator<Juego> it = juegos.listIterator();
+			for (int ii=0; ii<juegos.size(); ii++) {
+				if(it.next().designation.equals(contenido)) {
                     return true;
                 }
 			}
-			//result = fich.contains(contenido);
 		} catch(NullPointerException e) {
 			System.out.println("fallo");
 		}
 		return result;		
 	}
+
+    private Boolean buscarCodigo(short code, int index) {
+        Boolean result = false;
+        try {
+            ListIterator<Juego> it = juegos.listIterator();
+            for (int ii=index; ii<juegos.size(); ii++) {
+                if(it.next().code == code) {
+                    index = ii;
+                    return true;
+                }
+            }
+        } catch(NullPointerException e) {
+            System.out.println("fallo");
+        }
+        return result;
+    }
+
+    private Boolean buscarJugador(String alias, int index) {
+        Boolean result = false;
+        try {
+            ListIterator<Jugador> it = jugadores.listIterator();
+            for (int ii=index; ii<jugadores.size(); ii++) {
+                if(it.next().alias == alias) {
+                    index = ii;
+                    return true;
+                }
+            }
+        } catch(NullPointerException e) {
+            System.out.println("fallo");
+        }
+        return result;
+    }
+
+    private Boolean buscarJugando(String alias, int juegoindex) {
+        Boolean result = false;
+        List<Jugador> playing = juegos.get(juegoindex).Jugando;
+        try {
+            ListIterator<Jugador> it = playing.listIterator();
+            for (int ii=0; ii<playing.size(); ii++) {
+                if(it.next().alias == alias) {
+                    return true;
+                }
+            }
+        } catch(NullPointerException e) {
+            System.out.println("fallo");
+        }
+        return result;
+    }
 	
 	private void printhelp(List<String> fich) {
 		int ii=0;
@@ -300,4 +359,16 @@ public class Methods {
 		
 		return result;
 	}
+}
+
+class Juego {
+    short code;
+    String designation;
+    byte maximum;
+    List<Jugador> Jugando;
+}
+
+class Jugador {
+    String name;
+    String alias;
 }
