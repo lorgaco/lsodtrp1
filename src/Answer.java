@@ -6,7 +6,8 @@ import java.io.IOException;
 public class Answer {
 	private int error;
 	private int server_error;
-	private String answer;
+    private int lengthAnswer;
+    byte [] answer;
 	
 	public int getError() {
 		return error;
@@ -14,17 +15,23 @@ public class Answer {
 	public void setError(int error) {
 		this.error = error;
 	}
-	public String getAnswer() {
+    public int getServer_error() {
+        return server_error;
+    }
+    public void setServer_error(int server_error) {
+        this.server_error = server_error;
+    }
+    public int getLengthAnswer() {
+        return lengthAnswer;
+    }
+    public void setLengthAnswer(int lengthAnswer) {
+        this.lengthAnswer = lengthAnswer;
+    }
+	public byte [] getAnswer() {
 		return answer;
 	}
-	public void setAnswer(String answer) {
+	public void setAnswer(byte [] answer) {
 		this.answer = answer;
-	}
-	public int getServer_error() {
-		return server_error;
-	}
-	public void setServer_error(int server_error) {
-		this.server_error = server_error;
 	}
 	public byte [] toByteStruct() {
 		ByteArrayOutputStream baParams = new ByteArrayOutputStream();
@@ -32,10 +39,11 @@ public class Answer {
 		try {
 			dtParams.writeInt(this.error);
 			dtParams.writeInt(this.server_error);
+            dtParams.writeInt(this.lengthAnswer);
 			if(answer == null) {
-				dtParams.writeUTF("OK");
+				dtParams.writeUTF("");
 			} else {
-				dtParams.writeUTF(answer);
+				dtParams.write(answer);
 			}
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
@@ -44,7 +52,7 @@ public class Answer {
 		return byParams;
 	}
 	
-	public Answer(int error, int server_error, String answer) {
+	public Answer(int error, int server_error, byte [] answer) {
 		super();
 		this.error = error;
 		this.server_error = server_error;
