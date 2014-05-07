@@ -178,11 +178,14 @@ public class Client {
 						else{
 							try {
 								short code = Short.parseShort(strComand[1].toString());
-								List<Jugador> resultado = lista(code);
-                                ListIterator<Jugador> it = resultado.listIterator();
-                                for(int ii=0; ii<resultado.size(); ii++) {
-                                    Jugador player = it.next();
-                                    System.out.println(player.name + " (" + player.alias + ").");
+								sLista resultado = lista(code);
+                                if(resultado.error!=Data.OK) System.err.println("METHOD ERROR: " + Data.ErrorToString(resultado.error));
+                                else {
+                                    ListIterator<Jugador> it = resultado.lista.listIterator();
+                                    for(int ii=0; ii<resultado.lista.size(); ii++) {
+                                        Jugador player = it.next();
+                                        System.out.println(player.name + " (" + player.alias + ").");
+                                    }
                                 }
 							} catch (Exception e) {
 								System.err.println("FORMAT ERROR: " + e.getMessage());
@@ -257,7 +260,7 @@ public class Client {
 
             try {
                 out.code = dtResponse.readShort();
-                out.error = Data.NET_ERROR;
+                out.error = dtResponse.readInt();
                 return out;
             } catch (IOException e) {
                 System.err.println("ERROR: " + e.getMessage());
@@ -454,7 +457,7 @@ public class Client {
             for(int ii=0; ii<response.getLengthAnswer(); ii++){
                 Juego game = new Juego();
                 game.designation = dtResponse.readUTF();
-                game.code = dtResponse.readByte();
+                game.code = dtResponse.readShort();
                 game.maximum = dtResponse.readInt();
                 games.add(game);
             }
@@ -557,8 +560,8 @@ public class Client {
         }
 	}
 	
-	private static List<Jugador> lista(short code){
-		
+	private static sLista lista(short code){
+		sLista out = new sLista();
 		//================Arguments Packaging================//
 		ByteArrayOutputStream baParams = new ByteArrayOutputStream();
 		DataOutputStream dtParams = new DataOutputStream(baParams);
@@ -566,7 +569,9 @@ public class Client {
 			dtParams.writeShort(code);
 		} catch (IOException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return new ArrayList<Jugador>();
+            out.error = Data.INTERNAL_ERROR;
+            out.lista = new ArrayList<Jugador>();
+            return out;
 		}
 
 		//================Message Sending================//
@@ -581,7 +586,9 @@ public class Client {
 		int status = ccModule.doOperation(msRequest, msResponse);
 		if(status==Data.NET_ERROR) {
             System.err.println("ERROR: NET ERROR");
-            return new ArrayList<Jugador>();
+            out.error = Data.NET_ERROR;
+            out.lista = new ArrayList<Jugador>();
+            return out;
         }
 		
 		//================Response Processing================//
@@ -590,13 +597,16 @@ public class Client {
 
         if(response.getServer_error()!=Data.OK) {
             System.err.println("SERVER ERROR: " + Data.ErrorToString(response.getServer_error()));
-            return new ArrayList<Jugador>();
+            out.error = Data.SERVER_ERROR;
+            out.lista = new ArrayList<Jugador>();
+            return out;
         }
         else {
             ByteArrayInputStream baResponse = new ByteArrayInputStream(response.getAnswer());
             DataInputStream dtResponse = new DataInputStream(baResponse);
 
             try {
+                out.error = dtResponse.readInt();
                 List<Jugador> players = new ArrayList<Jugador>();
                 for (int ii = 0; ii < response.getLengthAnswer(); ii++) {
                     Jugador player = new Jugador();
@@ -604,10 +614,13 @@ public class Client {
                     player.alias = dtResponse.readUTF();
                     players.add(player);
                 }
-                return players;
+                out.lista = players;
+                return out;
             } catch (IOException e) {
                 System.err.println("ERROR: " + e.getMessage());
-                return new ArrayList<Jugador>();
+                out.error = Data.INTERNAL_ERROR;
+                out.lista = new ArrayList<Jugador>();
+                return out;
             }
         }
 	}

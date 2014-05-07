@@ -39,12 +39,13 @@ public class Answer {
 			dtParams.writeInt(this.server_error);
             dtParams.writeInt(this.lengthAnswer);
 			if(answer == null) {
-				dtParams.writeUTF("");
+                dtParams.writeInt(0);
 			} else {
+                dtParams.writeInt(this.answer.length);
 				dtParams.write(answer);
 			}
 		} catch (IOException e) {
-			System.err.println("ERROR: " + e.getMessage());
+			System.err.println("Answer ERROR: " + e.getMessage());
 		}
 		byte[] byParams = baParams.toByteArray();
 		return byParams;
@@ -57,9 +58,11 @@ public class Answer {
             this.error = dtCreation.readInt();
             this.server_error = dtCreation.readInt();
             this.lengthAnswer = dtCreation.readInt();
-            dtCreation.read(this.answer, 0, this.lengthAnswer);
-        } catch (IOException e) {
-            System.err.println("ERROR: " + e.getMessage());
+            int bytes = dtCreation.readInt();
+            this.answer = new byte[Data.MAX_ARGUMENTS_SIZE];
+            dtCreation.read(this.answer, 0, bytes);
+        } catch (Exception e) {
+            System.err.println("Answer ERROR: " + e.getMessage());
         }
     }
 	

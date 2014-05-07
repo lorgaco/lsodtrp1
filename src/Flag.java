@@ -35,7 +35,7 @@ public class Flag {
             }
             else {
                 answer.setError(Data.AUTENTICATION_FAILED);
-                answer.setServer_error(Data.OK);
+                answer.setServer_error(Data.AUTENTICATION_FAILED);
                 answer.setLengthAnswer(0);
                 answer.setAnswer(null);
             }
@@ -66,7 +66,7 @@ public class Flag {
             }
             else {
                 answer.setError(Data.AUTENTICATION_FAILED);
-                answer.setServer_error(Data.OK);
+                answer.setServer_error(Data.AUTENTICATION_FAILED);
                 answer.setLengthAnswer(1);
                 answer.setAnswer(null);
             }
@@ -128,7 +128,7 @@ public class Flag {
             }
             else {
                 answer.setError(Data.AUTENTICATION_FAILED);
-                answer.setServer_error(Data.OK);
+                answer.setServer_error(Data.AUTENTICATION_FAILED);
                 answer.setLengthAnswer(1);
                 answer.setAnswer(null);
             }
@@ -229,16 +229,17 @@ public class Flag {
 		DataInputStream dtParams = new DataInputStream(baParams);
 		try {
 			short code = dtParams.readShort();
-            List<Jugador> salida = method.lista(code);
+            sLista salida = method.lista(code);
 
             answer.setError(Data.OK);
             answer.setServer_error(Data.OK);
-            answer.setLengthAnswer(salida.size());
+            answer.setLengthAnswer(salida.lista.size());
 
             ByteArrayOutputStream baSalida = new ByteArrayOutputStream();
             DataOutputStream dtSalida = new DataOutputStream(baSalida);
-            ListIterator<Jugador> it = salida.listIterator();
-            for(int ii=0; ii<salida.size(); ii++) {
+            dtSalida.writeInt(salida.error);
+            ListIterator<Jugador> it = salida.lista.listIterator();
+            for(int ii=0; ii<salida.lista.size(); ii++) {
                 Jugador player = it.next();
                 dtSalida.writeUTF(player.name);
                 dtSalida.writeUTF(player.alias);
