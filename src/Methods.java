@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 
 public class Methods {
@@ -19,6 +16,7 @@ public class Methods {
             game.maximum = maximum;
             game.Jugando = new ArrayList<Jugador>();
             juegos.add(game);
+            Collections.sort(juegos, new gameComparator());
             out.code = codigo;
             out.error = Data.OK;
             return out;
@@ -47,6 +45,7 @@ public class Methods {
         int index = 0;
         if (!buscarJugador(player.alias, index)) {
             jugadores.add(player);
+            Collections.sort(jugadores, new playerComparator());
             return Data.OK;
         } else {
             return Data.ALREADY_EXISTS;
@@ -54,38 +53,10 @@ public class Methods {
     }
 
     public List<Jugador> plantilla() {
-		/*Answer answer = new Answer();
-		ArrayList<String> plantilla = new ArrayList<String>();
-		plantilla = leer2(jugadores);
-		Collections.sort(plantilla);
-		String plantilla_final = plantilla.toString();
-//		System.out.println(plantilla_final);  // PRINT
-		answer.setAnswer(plantilla_final);
-		answer.setError(Data.OK);
-		return answer;*/
         return jugadores;
     }
 
     public List<Juego> repertorio(byte minimum) {
-		/*Answer answer = new Answer();
-		ArrayList<String> repertorio = new ArrayList<String>();
-		repertorio = leer2(juegos);
-//		System.out.println(repertorio);  // PRINT
-		int min = minimum;
-		ArrayList<String> repertorio2 = new ArrayList<String>();
-		for(String temp : repertorio) {
-			String[] parts = temp.split(" -> ");
-			int part1 = Integer.parseInt(parts[1]);
-			if(part1>min) {
-				repertorio2.add(temp);
-				//repertorio.remove(temp);
-			}
-		}
-		System.out.println("RESULTADO REPERTORIO");  // PRINT
-//		System.out.println(repertorio2.toString());  // PRINT
-		answer.setAnswer(repertorio2.toString());
-		answer.setError(Data.OK);
-		return answer;*/
         List<Juego> repert = new ArrayList<Juego>();
         ListIterator<Juego> it = juegos.listIterator();
         for (int ii = 0; ii < juegos.size(); ii++) {
@@ -98,70 +69,6 @@ public class Methods {
     }
 
     public int juega(String alias, short code) {
-		/*Answer answer = new Answer();
-		String contenido = Integer.toString(code) + " : " + alias;
-
-		//System.out.println("ALIAS = " + alias);  // PRINT
-		//System.out.println("CODE = " + Integer.toString(code));  // PRINT
-		
-//		if(buscar2(alias, jugadores)) System.out.println("TRUE JUGADORES");  // PRINT
-//		if(buscar2(Integer.toString(code) + " <- ", juegos)) System.out.println("TRUE JUEGOS");  // PRINT
-		
-		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
-			//System.out.println("ENTRA 1");
-			if(!buscar2(contenido, playing)) {
-				//System.out.println("ENTRA 2");
-				ArrayList<String> lista = new ArrayList<String>();
-				lista = leer2(playing);
-				Collections.sort(lista);
-				int ii = 0;
-				
-				List<String> lista_final = new ArrayList<String>();
-				lista_final = subLista(lista, code);
-				
-				printhelp(lista_final);  // PRINT
-				System.out.println(" ");  // PRINT
-				
-				ArrayList<String> aux = new ArrayList<String>();
-				aux = leer2(juegos);
-				String aux2 = new String();
-				for (ii=0; ii<aux.size(); ii++) {
-					if(aux.get(ii).startsWith(Integer.toString(code))) {
-						aux2 = aux.get(ii).split(" -> ")[1];
-						break;
-					}
-				}
-				int max = Integer.parseInt(aux2);
-//				System.out.println("MAX = " + Integer.toString(max) + " ---> LISTA_SIZE = " +
-//                        Integer.toString(lista_final.size()));  // PRINT
-				if(lista_final.size() < max) {
-					//System.out.println("ENTRA 3");  // PRINT
-					escribir2(contenido, playing);
-					printhelp(playing);  // PRINT
-					answer.setAnswer(null);
-					answer.setError(Data.OK);
-					return answer;
-					//return Data.OK;
-				} else {
-					answer.setAnswer(null);
-					answer.setError(Data.MAX_ACHIEVED);
-					return answer;
-					//return Data.MAX_ACHIEVED;
-				}
-			} else {
-				answer.setAnswer(null);
-				answer.setError(Data.OK);
-				return answer;
-				//return Data.OK;
-			}
-		} else {
-			answer.setAnswer(null);
-			answer.setError(Data.DOESNT_EXIST);
-			return answer;
-			//return Data.DOESNT_EXIST;
-		}
-		
-		//return 0;*/
         int index = 0;
         if (buscarJugador(alias, index)) {
             Jugador player = jugadores.get(index);
@@ -182,25 +89,6 @@ public class Methods {
     }
 
     public int termina(String alias, short code) {
-		/*Answer answer = new Answer();
-		String contenido = Integer.toString(code) + " : " + alias;
-		if(buscar2(alias, jugadores) && buscar2(Integer.toString(code) + " <- ", juegos)) {
-			if(buscar2(contenido, playing)) {
-				playing.remove(playing.indexOf(contenido));
-				printhelp(playing);  // PRINT
-				answer.setAnswer(null);
-				answer.setError(Data.OK);
-				return answer;
-			} else {
-				answer.setAnswer(null);
-				answer.setError(Data.DOESNT_EXIST);
-				return answer;
-			}
-		} else {
-			answer.setAnswer(null);
-			answer.setError(Data.DOESNT_EXIST);
-			return answer;
-		}*/
         int index = 0;
         if (buscarJugador(alias, index)) {
             Jugador player = jugadores.get(index);
@@ -221,33 +109,6 @@ public class Methods {
     }
 
     public List<Jugador> lista(short code) {
-		/*Answer answer = new Answer();
-		ArrayList<String> lista = new ArrayList<String>();
-        ArrayList<String> lista2 = new ArrayList<String>();
-		lista = leer2(playing);
-        lista2 = leer2(juegos);
-		Collections.sort(lista);
-		printhelp(lista);  // PRINT
-		if(buscar2(Integer.toString(code) + " <- ", lista2)) {
-			List<String> lista_final = new ArrayList<String>();
-//            System.out.println("LISTA SIZE: " + lista.size());  // PRINT
-            //System.out.println(lista.size());  // PRINT
-			lista_final = subLista(lista, code);
-			
-			String lista_final2 = lista_final.toString();
-			System.out.println(" ");  // PRINT
-			System.out.println(" === LISTA === ");  // PRINT
-			printhelp(lista_final);  // PRINT
-			System.out.println(" ");  // PRINT
-			answer.setAnswer(lista_final2);
-			answer.setError(Data.OK);
-			return answer;
-		} else {
-			answer.setAnswer(null);
-			answer.setError(Data.DOESNT_EXIST);
-			return answer;
-		}
-		//return lista_final;*/
         int index = 0;
         if (buscarCodigo(code, index)) {
             Juego game = juegos.get(index);
@@ -352,4 +213,18 @@ class Jugador {
 class sNuevo {
     short code;
     int error;
+}
+
+class gameComparator implements Comparator<Juego> {
+    @Override
+    public int compare(Juego o1, Juego o2) {
+        return o1.designation.compareTo(o2.designation);
+    }
+}
+
+class playerComparator implements Comparator<Jugador> {
+    @Override
+    public int compare(Jugador o1, Jugador o2) {
+        return o1.alias.compareTo(o2.alias);
+    }
 }
